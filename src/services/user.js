@@ -1,10 +1,11 @@
 import {stringify} from 'qs';
 import request from '../utils/request.js';
 
+import { ITEM_NAME } from '../config.js'
 import { getItemEnv}  from '../utils/index.js'
 
 //const baseUrl=getItemEnv()==='development'?"http://120.95.133.187:8080":'http://59.110.141.166:8080';
-const baseUrl=getItemEnv()==='development'?"http://localhost:8080":'http://59.110.141.166:8080'
+const baseUrl=getItemEnv==="development"?`http://localhost:8080`:`http://www.llchaoblogs.work:8080/${ITEM_NAME}`
 export async function fetchUserListI(params){
     return request(`${baseUrl}/user?${stringify(params)}`).then(res=>res.data);
 }
