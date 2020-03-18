@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import {BrowserRouter,Route,Switch,Redirect} from 'dva/router'
+
 import styles from './IndexPage.css';
 
 function IndexPage() {
