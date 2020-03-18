@@ -11,7 +11,7 @@ function AdminSidebar(props) {
 
   useEffect(() => {
     // component did mount
-    console.log(props.location.pathname)
+    //console.log(props.location.pathname)
   }, [])
 
   // 菜单渲染

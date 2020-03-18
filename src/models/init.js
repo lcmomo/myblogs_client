@@ -31,12 +31,15 @@ export default {
     *fetch({ payload }, { call, put }) {  // eslint-disable-line
       yield put({ type: 'save' });
     },
+    //获取视口宽度
     getWindowWidth({payload},{call,put}){
       put({type:'updateWindowWidth'})
     
     },
+    //切换登录注册框
     switchSignModal({payload},{call,put}){
-      put({type:'switchSignModal'})
+      console.log(payload)
+      put({type:'switchSignModalR',payload:payload})
     }
   },
 
@@ -48,8 +51,10 @@ export default {
       const body = document.getElementsByTagName('body')[0]
       return {...state,windowWidth:body.clientWidth}
     },
-    switchSignModal(){
-
+    switchSignModalR(state,action){
+   
+       
+      return { ...state,  ...action.payload }
     }
 
 

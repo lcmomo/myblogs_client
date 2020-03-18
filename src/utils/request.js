@@ -22,7 +22,31 @@ function checkStatus(response) {
  * @return {object}           An object containing either "data" or "err"
  */
 export default function request(url, options) {
-  return fetch(url, options)
+  //console.log(options.body instanceof FormData);
+ 
+  const newOptions = {  ...options };
+  const storgetoken=localStorage.getItem('userInfo')!==null ? JSON.parse(localStorage.getItem('userInfo')).token : null
+  if (newOptions.method === 'POST' || newOptions.method === 'PUT'||newOptions.method==='DELETE') {
+    if (!(newOptions.body instanceof FormData)) {
+     
+      newOptions.headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/json; charset=utf-8',
+        token:storgetoken,
+        ...newOptions.headers,
+      };
+      newOptions.body = JSON.stringify(newOptions.body);
+    } else {
+      // newOptions.body is FormData
+      newOptions.headers = {
+        Accept: 'application/json',
+        token:storgetoken,
+        ...newOptions.headers,
+      };
+    }
+  }
+  
+  return fetch(url, newOptions)
     .then(checkStatus)
     .then(parseJSON)
     .then(data => ({ data }))
