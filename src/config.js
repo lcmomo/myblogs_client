@@ -24,3 +24,5 @@ export const GITHUB = {
   url: 'https://github.com/login/oauth/authorize', // 跳转的登录的地址
   loadingType: 1
 }
+
+const ITEM_NAME="myblogs-1.0"
