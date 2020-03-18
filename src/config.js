@@ -25,4 +25,4 @@ export const GITHUB = {
   loadingType: 1
 }
 
-const ITEM_NAME="myblogs-1.0"
+export const ITEM_NAME="myblogs-1.0"
