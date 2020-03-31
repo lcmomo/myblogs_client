@@ -11,7 +11,7 @@ export const SIDEBAR = {
   // 个人主页
   homepages: {
     github: 'https://github.com/lcmomo',
-    juejin: 'https://juejin.im/user/5acac6c4f265da2378408f92'
+    //juejin: 'https://juejin.im/user/5acac6c4f265da2378408f92'
   }
 }
 
@@ -26,3 +26,5 @@ export const GITHUB = {
 }
 
 export const ITEM_NAME="myblogs-1.0"
+
+export const API_BASE_URL = 'http://localhost:8080'

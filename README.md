@@ -440,3 +440,6 @@ PS : 觉得不错的伙伴可以给个 star ~~~ 或者 fork 下来看看哦。�
     "react-hot-loader": "^4.12.12",
     "redux-devtools-extension": "^2.13.8",
     "webpack-bundle-analyzer": "^3.5.0"
+
+    "less": "^3.11.1",
+    "less-loader": "^5.0.0",

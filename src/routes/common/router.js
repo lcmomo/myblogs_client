@@ -38,18 +38,58 @@ export const RouteConfig=[
     path:'/web',
     component:()=>(import('../../layout/web')),
     name:'webhome',
-    model:[import('../../models/user.js')],
-  //   routes:[
-  //     {
-  //       path : '/ad',
-  //       component : ()=> import('../IndexPage.js'),
-  //       name:'',
-  //       model:[import('../../models/init.js')]
-  //     },
-  //     {
-
-  //     }
-  //   ]
+    model:[import('../../models/user.js'),import('../../models/tag.js'),import('../../models/article.js')],
+    routes:[
+      {
+        path : '/web/home',
+        component: ()=> (import('../../views/web/home/home.js')),
+        name:'home',
+        model:[]
+      },
+      {
+        path : '/web/archives',
+        component: ()=> (import('../../views/web/archives/archives.js')),
+        name:'archives',
+        model:[]
+      },
+      {
+        path : '/web/article/:id',
+        component: ()=> (import('../../views/web/article/article.js')),
+        name:'article',
+        model:[]
+      },
+      {
+        path : '/web/categories/:name',
+        component : ()=> (import('../../views/web/categories/categories.js')),
+        name:'category',
+        model:[]
+      },
+      {
+        path : '/web/categories',
+        component : ()=> (import('../../views/web/categories/categories.js')),
+        name:'categories',
+        model:[]
+      },
+      {
+        path : '/web/categories',
+        component: ()=> (import('../../views/web/categories/categories.js')),
+        name:'categories',
+        model:[]
+      },
+      {
+        path : '/web/tags/:name',
+        component: ()=> (import('../../views/web/tag/tag.js')),
+        name:'tags',
+        model:[]
+      },
+      {
+        path : '/web/about',
+        component : ()=> (import('../../views/web/about/about.js')),
+        name:'about',
+        model:[]
+      },
+      
+    ]
    },
 
   {
