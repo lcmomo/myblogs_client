@@ -8,7 +8,7 @@ export default {
     user:{
       role:1
     },
-    windowWidth:0,
+    windowWidth:1366,
     signModal:{
       visible:false,
       type:'login'
@@ -49,7 +49,7 @@ export default {
     },
     updateWindowWidth(state,action){
       const body = document.getElementsByTagName('body')[0]
-      return {...state,windowWidth:body.clientWidth}
+      return {...state, windowWidth:body.clientWidth}
     },
     switchSignModalR(state,action){
    

@@ -8,7 +8,7 @@ import {HEADER_BLOG_NAME,LOGO_AVATAR} from '../../../../config.js'
 import  navList from '../right/navList.js'
 
 //icon
-import SvgIcon from '../../../../components/SvgIcon'
+
 
 
 const HeaderLeft = props => {

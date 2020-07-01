@@ -6,7 +6,6 @@ import {Icon,Divider,Tag} from 'antd'
 
 //components
 import {Link} from 'dva/router'
-import SvgIcon from '../../../components/SvgIcon'
 import Href from '../../../components/Href'
 
 const HOME_PAGE_ICONS_LIST=[
@@ -151,7 +150,7 @@ class SideBar extends Component{
        
       { articleList&&articleList.map(d => (
           <li key={d.id}>
-            <Link to={`/article/${d.id}`}>{d.title}</Link>
+            <Link to={`/web/article/${d.id}`}>{d.title}</Link>
           </li>
         ))}
       </ul>

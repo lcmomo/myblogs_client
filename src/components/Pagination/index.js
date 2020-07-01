@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'dva'
 import { Pagination } from 'antd'
- function WebPagination({ total, current, onChange, pageSize, windowWidth }) {
+ function WebPagination({ total, current, onChange, pageSize, windowWidth , showSizeChanger,onShowSizeChange}) {
   return (
     <div className='app-pagination'>
        <Pagination
@@ -11,7 +11,9 @@ import { Pagination } from 'antd'
         onChange={onChange}
         total={total}
         pageSize={pageSize}
-        simple={windowWidth < 736}
+        simple={windowWidth < 480}
+        showSizeChanger={ showSizeChanger}
+        onShowSizeChange={onShowSizeChange}
       />
     </div>
   )

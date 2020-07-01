@@ -7,7 +7,6 @@ import { DISCUSS_AVATAR } from '../../config'
 // components
 import Href from '../Href'
 import { Avatar, Popover, Icon, Typography } from 'antd'
-import SvgIcon from '../SvgIcon'
 
 const { Text, Title } = Typography
 
@@ -56,7 +55,7 @@ function AppAvatar(props) {
               {github.blog && (
                 <li>
                   <Href href={github.blog}>
-                    <SvgIcon type='iconblog2' className='mr10' />
+                    <Icon type='iconblog2' className='mr10' />
                     <span>{github.blog}</span>
                   </Href>
                 </li>
@@ -64,7 +63,7 @@ function AppAvatar(props) {
 
               {github.location && (
                 <li>
-                  <SvgIcon type='iconlocation' className='mr10' />
+                  <Icon type='iconlocation' className='mr10' />
                   {github.location}
                 </li>
               )}

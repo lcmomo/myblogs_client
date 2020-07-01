@@ -9,7 +9,7 @@ import { Icon, Divider, Empty, Drawer, Tag, Spin } from 'antd'
 import './home.less'
 import { get ,remove} from '../../../utils/storage'
 import { decodeQuery, translateMarkdown, calcCommentsCount } from '../../../utils/index'
-import SvgIcon from '../../../components/SvgIcon'
+import MyIcon from '../../../components/Icon'
 import ArticleTag from '../../../components/ArticleTag'
 import Pagination from '../../../components/Pagination'
  class Home extends Component {
@@ -19,18 +19,24 @@ import Pagination from '../../../components/Pagination'
         list:[],
         total:0,
         loading:false,
-        drawerVisible:false
+        drawerVisible:false,
+        windowWidth: 1366
       }
     }
 
     componentDidMount(){
       const params=decodeQuery(this.props.location.search)
+      this.props.dispatch({
+        type: 'init/getWindowWidth'
+      }).then(res => {
+        console.log('window', res)
+      })
 
     this.fetchArticleList(params)
     }
 
-    async fetchArticleList({page,keyword}){
-      const queryParams = { page, size: 10 }
+    async fetchArticleList({page,size=40,keyword}){
+      const queryParams = { page, size }
       if (keyword) queryParams.keywords = keyword
       let res={}
       await this.props.dispatch({
@@ -54,7 +60,7 @@ import Pagination from '../../../components/Pagination'
           {
             list.map(item => (
               <li key={item.id}>
-                <Link to={`/artice/${item.id}`}>
+                <Link to={`/web/article/${item.id}`}>
                   {item.title}
                 </Link>
               </li>
@@ -75,17 +81,26 @@ import Pagination from '../../../components/Pagination'
     }
     
     jumpTo(id){
-      this.props.history.push(`/article/${id}`)
+      this.props.history.push(`/web/article/${id}`)
     }
 
-    handlePageChange(page) {
+    handlePageChange = (page,size) => {
       document.querySelector('.app-main').scrollTop = 0
-      const params = { ...decodeQuery(this.props.location.search), page }
-      let url
-      Object.entries(params).forEach(item => {
-        url = !url ? `?${item[0]}=${item[1]}` : `${url}&${item[0]}=${item[1]}`
-      })
-      this.props.history.push(url)
+      console.log(page,size)
+      const queryParams = { page,size }
+      this.fetchArticleList(queryParams)
+      // const params = { ...decodeQuery(this.props.location.search), page }
+      // let url
+      // Object.entries(params).forEach(item => {
+      //   url = !url ? `?${item[0]}=${item[1]}` : `${url}&${item[0]}=${item[1]}`
+      // })
+      // this.props.history.push(url)
+  
+    }
+    handleSizeChange = (page,size) => {
+      console.log(page,size)
+      const queryParams = { page,size }
+      this.fetchArticleList(queryParams)
     }
     
     render() {
@@ -93,8 +108,8 @@ import Pagination from '../../../components/Pagination'
       console.log(this.props.article)
       const { page, keyword } = decodeQuery(this.props.location.search)
       const { loading }=this.state
-      const { articleList, total} =this.props.article
-      const list=articleList&&articleList.length>0 ? articleList:this.state.list
+      const { articleList, total , pageNum, pageSize }  = this.props.article
+      const list = articleList && articleList.length > 0 ? articleList : this.state.list
       
       return (
         <Spin tip="Loading..." spinning={ loading }>
@@ -112,21 +127,20 @@ import Pagination from '../../../components/Pagination'
                     <div
                       onClick={() => this.jumpTo(item.id)}
                       className='article-detail content'
-                      //dangerouslySetInnerHTML={{__html:item.content}}
+                      dangerouslySetInnerHTML={{__html: translateMarkdown(item.content)}}
                     
                       /> 
-                    { item.content}
+                    {/* { item.content} */}
                     <div className='list-item-others'>
-                    <SvgIcon type='iconcomment' />
-                    {/* <span style={{ marginRight: 5 }}> {calcCommentsCount(item.comments)}</span> */}
-                    <span> 评论:1</span>
-                    <SvgIcon type='iconview' style={{marginRight:5 }} />
+                    <MyIcon type='message' />
+                    <span style={{ marginRight: 5 }}> {calcCommentsCount(item.commentList)}</span>
+                    <MyIcon type='eye' style={{marginRight:5 }} />
                     <span>{item.viewCount}</span>
 
-                    {/* <ArticleTag 
-                    // tagList={ item.tags } 
-                    // categoryList={item.categories}
-                     /> */}
+                    <ArticleTag 
+                    tagList={ item.tagList } 
+                    categoryList={item.categoryList}
+                     />
 
                     </div>
                   </li>
@@ -136,7 +150,9 @@ import Pagination from '../../../components/Pagination'
             {
               list.length > 0 ? (
                 <>
-                {this.windowWith > 1300 >(
+                {
+                // this.state.windowWidth > 1300
+                 (
                   <this.preView list={list} />
                 )}
                 </>
@@ -151,7 +167,7 @@ import Pagination from '../../../components/Pagination'
               )
             }
 
-            <Pagination current={parseInt(page) || 1} onChange={this.handlePageChange} total={total || this.state.total} />
+            <Pagination current={parseInt(pageNum) || 1} onChange={this.handlePageChange} onShowSizeChange={this.handleSizeChange} total={total || this.state.total} windowWith={ 1366  } pageSize={pageSize || 10 } showSizeChanger />
 
           </div>
         </Spin>

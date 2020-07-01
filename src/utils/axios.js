@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { API_BASE_URL } from '../config'
+import { API_BASE_URL } from '../config.js'
 
 import { message } from 'antd'
-import { clear, get } from '@/utils/storage'
+import { clear, get } from './storage'
 
-import { USER_LOGIN_OUT } from '../models/type'
-import { getToken } from '@/utils'
+
+import { getToken } from './index'
 
 // create an axios instance
 const service = axios.create({
@@ -47,7 +47,7 @@ service.interceptors.response.use(
       if (err.response) {
         switch (err.response.status) {
           case 401:
-            store.dispatch({ type: USER_LOGIN_OUT })
+            //store.dispatch({ type: USER_LOGIN_OUT })
             message.error('登录信息过期或未授权，请重新登录！')
             break
 

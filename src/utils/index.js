@@ -1,5 +1,6 @@
 import xss from 'xss'
 import marked from 'marked'
+import hljs from 'highlight.js'
 import { clear, get } from './storage'
 
 
@@ -126,9 +127,14 @@ export const translateMarkdown = (plainText,isGuardXss = false)=> {
 
 // 计算 评论数
 export const calcCommentsCount = commentList => {
-  let count = commentList.length
+  let count =0
+  if(commentList){
   commentList.forEach(item => {
-    count += item.replies.length
+    
+    if (item.replyList){
+      count+=item.replyList.length
+    }
   })
+}
   return count
 }

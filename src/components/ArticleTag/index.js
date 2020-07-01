@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import { withRouter,Link } from 'dva/router'
 import { connect } from 'dva'
 import {Icon,Tag,Divider } from 'antd'
-import SvgIcon from '../SvgIcon'
 
 function getColor(name,colorList) {
+  console.log(colorList)
   const target = colorList.find(c => c.name === name)
   return target ? target.color : ''
 }
@@ -13,27 +13,27 @@ function getColor(name,colorList) {
 const ArticleTag = ({ tagList,categoryList,tagColorList }) => {
   return (
     <>
-    { tagList.length > 0 && (
+    { tagList && tagList.length > 0 && (
       <>
         <Divider type='vertical' style={{ marginRight: 7}} />
-        <SvgIcon type='icontags' style={{ marginRight: 7}} />
+        <Icon type='tag' style={{ marginRight: 7}} />
         {
           tagList.map((tag,i) => (
-            <Tag key={i} color = {getColor(tag.name,tagColorList)} >
-              <Link to={`/tags/${tag.name}`}>{tag.name}</Link>
+            <Tag key={i} color = {getColor(tag.tagName,tagColorList)} >
+              <Link to={`/tags/${tag.tagName}`}>{tag.tagName}</Link>
             </Tag>
           ))
         }
       </>
     )}
 
-    {categoryList.length > 0 && (
+    {categoryList && categoryList.length > 0 && (
             <>
               <Divider type='vertical' style={{ marginRight: 7 }} />
               <Icon type='folder' style={{ marginRight: 7 }} />
               {categoryList.map((cate, i) => (
                 <Tag key={i} color='#2db7f5'>
-                  <Link to={`/categories/${cate.name}`}>{cate.name}</Link>
+                  <Link to={`/categories/${cate.categoryName}`}>{cate.categoryName}</Link>
                 </Tag>
               ))}
             </>
@@ -43,10 +43,8 @@ const ArticleTag = ({ tagList,categoryList,tagColorList }) => {
 }
 
 ArticleTag.propTypes = {
-  tagList: PropTypes.array.isRequired,
-  categoryList: PropTypes.array.isRequired
+ // tagList: PropTypes.array.isRequired,
+  // categoryList: PropTypes.array.isRequired
 }
 
-export default connect(state =>({
-  tagColorList:state.article.tagList
-}))(withRouter(ArticleTag))
+export default connect(({article, init})=>({ article,windowWith:init.windowWith, tagColorList: article.tagList}))(withRouter(ArticleTag))

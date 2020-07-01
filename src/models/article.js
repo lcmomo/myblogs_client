@@ -39,7 +39,7 @@ export default {
 
 
     state:{
-      articleLst:[]
+      articleList:[]
     },
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
@@ -70,17 +70,21 @@ export default {
 
   reducers: {
     saveArticlelist(state, action) {
-      const {message,data} = action.payload
+      const { message,data } = action.payload
       let  articleList =[]
+      let tagList = []
+      let categotyList = []
       if(message==='SUCCESS'){
-       
+        tagList = genertorColor(data.list, COLOR_LIST)
         articleList=data.list
+        categotyList = genertorColor(data.list, COLOR_LIST)
+        
        
       }
        
      
 
-      return { ...state, articleList:articleList ,total:data.total};
+      return { ...state, articleList:articleList ,categotyList, tagList,total:data.total, pageNum:data.pageNum, pageSize: data.size};
     },
 
     findByKey(state,action){
