@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "antd": "^3.26.11",
+    "axios": "^0.19.2",
     "babel-plugin-import": "^1.11.0",
     "crypto-js": "^3.3.0",
     "dva": "^2.4.1",
