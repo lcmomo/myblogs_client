@@ -14,3 +14,8 @@ export async function fetchByKeywordsI(params){
   console.log(params)
     return request(`${baseUrl}/article/findbykeywords?${stringify(params)}`).then(res=>res.data);
 }
+
+export async function fetchArticleDetailByIdI(params){
+  console.log(params)
+    return request(`${baseUrl}/article/detail?${stringify(params)}`).then(res=>res.data);
+}

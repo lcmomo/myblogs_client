@@ -1,6 +1,6 @@
 
 import {get,remove,save } from '../utils/storage'
-import {fetchArticleListI,fetchByKeywordsI} from '../services/article'
+import {fetchArticleListI,fetchByKeywordsI, fetchArticleDetailByIdI } from '../services/article'
 
 import { COLOR_LIST } from '../utils/constant'
 import { randomIndex,getTagsCount } from '../utils/index'
@@ -39,7 +39,8 @@ export default {
 
 
     state:{
-      articleList:[]
+      articleList:[],
+      articleDetail: {}
     },
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
@@ -65,6 +66,13 @@ export default {
         callback(results);
       }
     },
+    *findArticleDetailById({ payload, callback }, { call, put}) {
+      const results = yield call(fetchArticleDetailByIdI, payload)
+      yield put ({ type: 'saveArticleDetail',payload: results})
+      if (typeof callback === 'function') {
+        callback(results.data);
+      }
+    }
     
   },
 
@@ -91,6 +99,13 @@ export default {
       const { message,data } = action.payload
       return {
         articleList:data.list
+      }
+    },
+    saveArticleDetail (state, action) {
+      const { message,data } = action.payload
+      // console.log('message', data)
+      return {
+        articleDetail: data
       }
     }
     

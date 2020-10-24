@@ -1,6 +1,7 @@
 import xss from 'xss'
 import marked from 'marked'
 import hljs from 'highlight.js'
+import  pathToRegexp from 'path-to-regexp';
 import { clear, get } from './storage'
 
 
@@ -137,4 +138,19 @@ export const calcCommentsCount = commentList => {
   })
 }
   return count
+}
+
+
+
+export function urlToList(url) {
+  const urllist = url.split('/').filter(i => i);
+  return urllist.map((urlItem, index) => {
+    return `/${urllist.slice(0, index + 1).join('/')}`;
+  });
+}
+
+
+export function getPathParams(urlpattern,pathname){
+  const match=pathToRegexp(urlpattern).exec(pathname);
+  return match;
 }
