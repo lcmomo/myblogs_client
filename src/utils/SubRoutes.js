@@ -37,7 +37,9 @@ const dynamicCom =(app,models,component,routes,isAuthority,userInfo,exact)=>
 }
 
 
-export default connect(({init})=>({userInfo:init.user}))(SubRoutes)
+export default connect(
+  ({init})=>({userInfo: {}})
+  )(SubRoutes)
 
 //重定向封装组件
 export function RedirectRoute({routes,from,exact}){

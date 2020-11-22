@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {BrowserRouter,Route,Switch, Redirect} from 'dva/router';
 import { connect } from 'dva'
 
-import routes from './routes'
+
 
  class App extends Component {
      componentDidMount(){
@@ -50,11 +50,8 @@ import routes from './routes'
 
      
     render() {
-        console.log(this.props.init)
-        // const children = this.renderRoutes(routes, '/')
-        // return <BrowserRouter>{children}</BrowserRouter>
         return (<div>APP</div>)
         
     }
 }
-export default connect(({init})=>({role:init.user.role}))(App)
+export default connect()(App)

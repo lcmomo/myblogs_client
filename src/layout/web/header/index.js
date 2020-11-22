@@ -1,8 +1,8 @@
 import React,{Component } from 'react'
 import {Layout,Row,Col } from 'antd'
 import Left from './left'
- import Right from './right'
-
+import Right from './right'
+import {HEADER_BLOG_NAME,LOGO_AVATAR} from '../../../config.js'
 const Header=Layout.Header
 
 //响应式

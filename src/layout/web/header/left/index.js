@@ -62,13 +62,13 @@ const HeaderLeft = props => {
       {/* <SvgIcon type='iconblog' style={{ color: '#055796', width: 16, height: 16 }} /> */}
       <img src={LOGO_AVATAR} style={{ width:25,height:25,marginBottom:5}}/>
       <span className='blog-name'>{HEADER_BLOG_NAME}</span>
-      <Dropdown
+      {/* <Dropdown
         overlayClassName='header-dropdown'
         trigger={['click']}
         overlay={menu}
         getPopupContainer={() => document.querySelector('.app-header .header-left')}>
         <Icon type='menu-o' className='header-dropdown-icon' />
-      </Dropdown>
+      </Dropdown> */}
     </div>
   )
 }
