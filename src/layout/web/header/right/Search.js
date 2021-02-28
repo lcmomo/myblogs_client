@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Input, Icon, Row } from 'antd'
 import { withRouter } from 'dva/router'
+import { connect } from 'dva'
 
 
 
@@ -8,7 +9,15 @@ function SearchButton(props) {
   const [keyword, setKeyword] = useState('')
 
   const handleSubmit = () => {
-    if (keyword) props.history.push(`/?page=1&keyword=${keyword}`)
+    if (keyword) 
+    props.dispatch({
+      type:'article/findBKeywords',
+      payload:{
+        page:1,
+        keywords:keyword
+      }
+    })
+
   }
 
   const handleChange = e => {
@@ -21,7 +30,13 @@ function SearchButton(props) {
 
   return (
     <div id='search-box'>
-      <Icon type='search' className='search-icon' onClick={e => props.history.push(`/?page=1&keyword=${keyword}`)} />
+      <Icon type='search' className='search-icon' onClick={e => props.dispatch({
+        type:'article/findBKeywords',
+        payload:{
+          page:1,
+          keywords:keyword
+        }
+      })} />
       <Input
         type='text'
         value={keyword}
@@ -36,4 +51,4 @@ function SearchButton(props) {
   )
 }
 
-export default withRouter(SearchButton)
+export default connect(({article}) => ({ article: article }))(withRouter(SearchButton))

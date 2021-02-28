@@ -1,68 +1,136 @@
-import React,{useEffect,useState}from 'react'
-import {SIDEBAR} from '../../../config.js'
-//import {request} from '../../../utils/axios'
-import {connect } from 'dva'
-import {Icon,Divider,Tag} from 'antd'
-
+import React, { useEffect, useState, Component }from 'react'
+import { SIDEBAR } from '../../../config.js'
+// import { request } from '../../../utils/axios'
+import { Icon, Divider, Tag } from 'antd';
+import { connect } from 'dva';
 //components
-import {Link} from 'dva/router'
-import SvgIcon from '../../../components/SvgIcon'
-import Href from '../../../components/Href'
+import { Link, withRouter } from 'dva/router';
+import Href from '../../../components/Href';
 
-const HOME_PAGE_ICONS_LIST=[
+// import axios from 'axios';
+
+const HOME_PAGE_ICONS_LIST = [
   {
-    key:'github',
-    value :<Icon type='github' theme='filled' className='homepage-icon' />
+    key: 'github',
+    value : <Icon type='github' theme='filled' className='homepage-icon' />
   }
 ]
 
- function SideBar(props) {
-  const [articleList, setArticleLst] = useState([])
-
-  // useEffect(() => {
-  //   console.log("获取文章列表")
-  //   // return () => {
-  //   //  console.log("完成")
-  //   // };
-  // }, [])
-
-  //渲染个人主页图标
-  const renderHomePagesIcon = key =>{
-    const target=HOME_PAGE_ICONS_LIST.find(d=>d.key===key)
-    return target && target.value
+@connect(({article, tag }) => ({
+  article: article,
+  tag: tag
+}
+))
+export default class SideBar extends Component {
+  constructor () {
+    super();
+    this.state = {
+      articleList: [],
+      tagList: []
+    }
   }
 
-  console.log("SIDEBAR")
+  componentDidMount () {
+    this.getTagList();
+    this.getArticleList();
+  }
 
-  return (
-    <div className='app-sidebar'>
-      sidebar
-    <img src={SIDEBAR.avatar} className='sider-avatar' alt='' />
-    <h2 className='title'>{SIDEBAR.title}</h2>
-    <h5 className='sub-title'>{SIDEBAR.subTitle}</h5>
-    <ul className='home-pages'>
-      {Object.keys(SIDEBAR.homepages).map(key => (
-        <li key={key}>
-          {renderHomePagesIcon(key)}
-          <Href href={SIDEBAR.homepages[key]}>{key}</Href>
-        </li>
-      ))}
-    </ul>
 
-    <Divider orientation='left'>热门文章</Divider>
-    <ul className='article-list'>
-     
-      热门文章
-    </ul>
+  getTagList() {
 
-    <Divider orientation='left'>标签</Divider>
-    <div className='tag-list'>
-     
-      标签
+    // try {
+    //   axios.get('http://localhost:3002/tag/list', { params: { order: 'viewCount DESC', page: 1, pageSize: 6 } }).then(res => {
+    //     console.log(res);
+    //     const { code, data } = res.data;
+    //     if (code === 200)
+    //     this.setState({ articleList: data.rows })
+    //   })
+    // } catch (error) {
+    //   console.error(error)
+    // }
+    let res = {};
+    this.props.dispatch({
+      type: 'tag/fetchTagList',
+      payload: {
+
+      },
+      callback: result => {
+        res = result
+        this.setState({ ...this.state, ...result })
+      }
+    })
+    return res;
+
+  }
+
+  async getArticleList() {
+    // try {
+    //   axios.get('http://localhost:3002/article/list', { params: { order: 'viewCount DESC', page: 1, pageSize: 6 } }).then(res => {
+    //     console.log(res);
+    //     const { code, data } = res.data;
+    //     if (code === 200)
+    //     this.setState({ articleList: data.rows })
+    //   })
+    // } catch (error) {
+    //   console.error(error)
+    // }
+    await this.props.dispatch({
+      type: 'article/fetchArticleList',
+      payload: {
+        pageSize: 6,
+        pageNo: 1,
+        order: 'viewCount DESC'
+      },
+      callback: result => {
+        this.setState({ ...result })
+      }
+    })
+
+  }
+
+  render(){
+
+    const renderHomePagesIcon = key =>{
+      const target = HOME_PAGE_ICONS_LIST.find(d => d.key === key);
+      return target && target.value;
+    }
+    // const { articleList, } = this.state;
+    const { articleList , tagList } = this.state;
+    return (
+      <div className='app-sidebar'>
+        <img src={ SIDEBAR.avatar } className='sider-avatar' alt='' />
+        <h2 className='title'>{ SIDEBAR.title }</h2>
+        <h5 className='sub-title'>{ SIDEBAR.subTitle }</h5>
+        <ul className='home-pages'>
+          {Object.keys(SIDEBAR.homepages).map(key => (
+            <li key={key}>
+              {renderHomePagesIcon(key)}
+              <Href href={SIDEBAR.homepages[key]}>{key}</Href>
+            </li>
+          ))}
+        </ul>
+        <Divider orientation='left'>热门文章</Divider>
+        <ul className='article-list'>
+
+        { articleList && articleList.map(d => (
+            <li key={d.id}>
+              <Link to={`/web/article/${d.id}`}>{d.title}</Link>
+            </li>
+          ))}
+        </ul>
+        <Divider orientation='left'>标签</Divider>
+        <div className='tag-list'>
+        {
+          tagList && tagList.map((tag, i) => (
+            <Tag key={ i } color={ tag.color }>
+              <Link to="/">{ tag.name }</Link>
+            </Tag>
+          ))
+          }
+      </div>
     </div>
-  </div>
-  )
+    )
+
+
+  }
 }
-
-
-export default connect(({user})=>({user}))(SideBar)

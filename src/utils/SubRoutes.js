@@ -6,10 +6,10 @@ import NoMatch from '../components/NoMatch/NoMatch.js';
 
 
 //解决动态加载路由组件方法
-const dynamicCom =(app,models,component,routes,isAuthority,userInfo,exact)=>
+const dynamicCom =(app,models,component,routes,isAuthority,userInfo)=>
   dynamic({
     app,
-    models:()=>models,
+    models:() => models,
     component:()=>
       component().then(res=>{
        //console.log(userInfo)
@@ -19,8 +19,8 @@ const dynamicCom =(app,models,component,routes,isAuthority,userInfo,exact)=>
         //   //   return ()=> <Redirect to ="/login" />
         //   // }
         // }
-        const Component =res.default ||res;
-        return props =><Component {...props} app={app} routes={routes}/>
+        const Component =res.default || res;
+        return props => <Component {...props} app={app} routes={routes} />
       })
   })
 
@@ -37,7 +37,9 @@ const dynamicCom =(app,models,component,routes,isAuthority,userInfo,exact)=>
 }
 
 
-export default connect(({init})=>({userInfo:init.user}))(SubRoutes)
+export default connect(
+  ({init})=>({userInfo: {}})
+  )(SubRoutes)
 
 //重定向封装组件
 export function RedirectRoute({routes,from,exact}){

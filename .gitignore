@@ -4,10 +4,16 @@
 node_modules
 /.pnp
 .pnp.js
+<<<<<<< HEAD
 
 # testing
 /coverage
+=======
+>>>>>>> dev_useNodejs
 
+# testing
+/coverage
+dist
 # production
 /build
 
@@ -25,3 +31,6 @@ yarn-error.log*
 # upload
 /server/upload/*
 /server/output/*
+
+package-lock.json
+

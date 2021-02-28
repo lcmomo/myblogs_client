@@ -7,7 +7,8 @@ export default
         alias:{
             Assets:path.resolve(__dirname,'./src/assets')
         },
-        "disableCSSModules":true
+        "disableCSSModules": true,
+        es5ImcompatibleVersions: true,
        
     }
 

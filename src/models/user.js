@@ -1,16 +1,16 @@
 import * as TYPES from './type.js'
-import {get,remove,save } from '../utils/storage'
-import {loginI,fetchByUserNameI, fetchUserByEmailI,createUserI} from '../services/user'
+import {get, remove, save } from '../utils/storage'
+import {loginI,fetchByUserNameI, fetchUserByEmailI,createUserI, registerI }  from '../services/user'
 
 const userInfo = get('userInfo')
 
 let defaultState={
   userInfo: {
-            username:'',
-            role:1,
-            userid:0,
-            github:null
-          },
+    username: '',
+    role: 1,
+    userid: 0,
+    github: null
+    },
 }
 
 if (userInfo) {
@@ -30,7 +30,7 @@ export default {
 //       },
 // },
 
-    state:defaultState,
+  state:defaultState,
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
     },
@@ -42,13 +42,12 @@ export default {
     },
     //登录
     *login({payload,callback},{call,put}){
-    
-      const results=yield call(loginI,payload)
-     
+      const results = yield call(loginI, payload)
+
       if (typeof callback === 'function') {
         callback(results);
       }
-      yield put({type:'savelogin' ,payload:results.data})
+      yield put({type:'saveLogin' ,payload: results.data })
 
 
     },
@@ -71,13 +70,13 @@ export default {
 
     //退出登录
     *logout({ payload }, { call, put }){
-      yield put({ type: 'savelogout' });
+      yield put({ type: 'saveLogout' });
     
     },
 
     //添加用户列表
     *createUser({payload,callback},{call}){
-      console.log('resgister')
+      // console.log('resgister')
       const response=yield call(createUserI,payload);
       //console.log(payload);
      
@@ -87,31 +86,39 @@ export default {
         }
       }
     },
-   
+
+    // 注册
+    *register({payload,callback},{call}){
+      // console.log('resgister')
+      const response = yield call(registerI,payload);
+      //console.log(payload);
+
+        if (typeof callback === 'function') {
+          callback(response);
+        }
+    },
+
   },
 
   reducers: {
     // save(state, action) {
     //   return { ...state, ...action.payload };
     // },
-    savelogout(state,action){
+    saveLogout(state,action){
       remove('userInfo');
       return { ...state, username: '', userId: 0, role: 2, github: null }
     },
-    savelogin(state,action){
-     
-     
-      if(action.payload && action.payload.user){
-      const {user,token}=action.payload
-     
-      const { username, userid, role, github = null } = user
-      save('userInfo', { username, userid, role, github, token })
-      return { ...state, username, userid, role, github }
-      }else{
-        return { ...state}
+    saveLogin(state,action){
+
+      if(action.payload){
+        // console.log("login reducer")
+        // console.log(action.payload)
+        const { username, userId, role, github = null, token } = action.payload
+        save('userInfo', { username, userId, role, github, token })
+        return { ...state, username, userId, role, github }
+      } else{
+        return { ...state }
       }
-     
-     
       // return {...state,...action.payload}
     }
 

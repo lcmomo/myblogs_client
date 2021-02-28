@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import {Link,withRouter} from 'dva/router'
 import {Menu,Icon} from 'antd'
 
-import navList from './navList.js'
+import navList from '../navList.js'
 
 @withRouter
  class Navbar extends Component {

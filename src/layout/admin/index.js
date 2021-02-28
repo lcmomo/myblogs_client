@@ -71,7 +71,7 @@ export default class AdminLayout extends Component {
            <AdminHeader collapsed={collapsed} onToggle={e => this.setState({collapsed:!collapsed})} />
          </Header>
          <Content className='admin-main'>
-           {console.log(routes[0].component)}
+          
            <Switch>
                  {routes.map((route, i) => (
                   
