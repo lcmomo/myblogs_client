@@ -2,7 +2,7 @@ export default [
   {
     icon: 'home',
     title: '首页',
-    link: '/'
+    link: '/web/home'
   },
   {
     icon: 'edit',
@@ -17,6 +17,6 @@ export default [
   {
     icon: 'user',
     title: '关于',
-    link: '/about'
+    link: '/web/about'
   }
 ]

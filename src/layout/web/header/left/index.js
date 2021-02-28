@@ -5,7 +5,7 @@ import { withRouter } from 'dva/router'
 
 //import config
 import {HEADER_BLOG_NAME,LOGO_AVATAR} from '../../../../config.js'
-import  navList from '../right/navList.js'
+import  navList from '../navList.js'
 
 //icon
 
@@ -13,49 +13,48 @@ import  navList from '../right/navList.js'
 
 const HeaderLeft = props => {
   const [keyword, setKeyword] = useState('')
- 
 
-  const menu = (
-    <Menu className='header-nav'>
-      {navList.map(nav => (
-        <Menu.Item key={nav.link}>
-          <Link to={nav.link}>
-            {nav.icon && <Icon type={nav.icon} style={{ marginRight: 15 }} />}
-            <span className='nav-text'>{nav.title}</span>
-          </Link>
-        </Menu.Item>
-      ))}
-      <Menu.Item key={'search'}>
-        <Icon type='search' />
-        <Input
-          className='search-input'
-          onClick={clickSearch}
-          value={keyword}
-          onChange={handleChange}
-          onPressEnter={onPressEnter}
-          onBlur={onSubmit}
-        />
-      </Menu.Item>
-    </Menu>
-  )
+  // const menu = (
+  //   <Menu className='header-nav'>
+  //     {navList.map(nav => (
+  //       <Menu.Item key={nav.link}>
+  //         <Link to={nav.link}>
+  //           {nav.icon && <Icon type={nav.icon} style={{ marginRight: 15 }} />}
+  //           <span className='nav-text'>{nav.title}</span>
+  //         </Link>
+  //       </Menu.Item>
+  //     ))}
+  //     <Menu.Item key={'search'}>
+  //       <Icon type='search' />
+  //       <Input
+  //         className='search-input'
+  //         onClick={clickSearch}
+  //         value={keyword}
+  //         onChange={handleChange}
+  //         onPressEnter={onPressEnter}
+  //         onBlur={onSubmit}
+  //       />
+  //     </Menu.Item>
+  //   </Menu>
+  // )
 
-  function handleChange(e) {
-    e.preventDefault()
-    setKeyword(e.target.value)
-  }
+  // function handleChange(e) {
+  //   e.preventDefault()
+  //   setKeyword(e.target.value)
+  // }
 
-  function onPressEnter(e) {
-    e.target.blur()
-  }
+  // function onPressEnter(e) {
+  //   e.target.blur()
+  // }
 
-  function onSubmit() {
-    props.history.push(`/?page=1&keyword=${keyword}`)
-    setKeyword('')
-  }
+  // function onSubmit() {
+  //   props.history.push(`/?page=1&keyword=${keyword}`)
+  //   setKeyword('')
+  // }
 
-  function clickSearch(e) {
-    e.stopPropagation()
-  }
+  // function clickSearch(e) {
+  //   e.stopPropagation()
+  // }
 
   return (
     <div className='header-left'>

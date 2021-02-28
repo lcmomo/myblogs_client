@@ -4,6 +4,7 @@ import { withRouter } from 'dva/router'
 import { connect } from 'dva'
 
 
+
 function SearchButton(props) {
   const [keyword, setKeyword] = useState('')
 
@@ -50,4 +51,4 @@ function SearchButton(props) {
   )
 }
 
-export default connect(({article}) => (article))(withRouter(SearchButton))
+export default connect(({article}) => ({ article: article }))(withRouter(SearchButton))

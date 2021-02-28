@@ -7,7 +7,7 @@ class HeaderRight extends Component {
     return (
       <div className='header-right'>
         <Search />
-        {/* <UserInfo /> */}
+        <UserInfo />
         <Navbar />
       </div>
     )

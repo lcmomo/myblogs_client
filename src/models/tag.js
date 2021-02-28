@@ -1,6 +1,5 @@
 
-import {get,remove,save } from '../utils/storage'
-import {fetchTagListI} from '../services/tag'
+import { fetchTagListI } from '../services/tag'
 
 import { COLOR_LIST } from '../utils/constant'
 import { randomIndex,getTagsCount } from '../utils/index'
@@ -13,34 +12,15 @@ function genertorColor(list = [], colorList = []) {
   _list.forEach((l, i) => {
     l.color = colorList[i] || colorList[randomIndex(colorList)]
   })
-  console.log("l")
   console.log(list)
   return _list
 }
 
-const userInfo = get('userInfo')
-
-let defaultState={
-  userInfo: {
-            username:'',
-            role:1,
-            userid:0,
-            github:null
-          },
-}
-
-if (userInfo) {
-  defaultState = { ...defaultState, ...userInfo }
-}
-
-
 export default {
 
   namespace: 'tag',
-
-
     state:{
-      tagLst:[]
+      tagList:[]
     },
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
@@ -48,44 +28,36 @@ export default {
   },
 
   effects: {
-    *fetchTagList({ payload,callback }, { call, put }) {  // eslint-disable-line
-      const results=yield call(fetchTagListI,payload);
-    
+    *fetchTagList({ payload, callback }, { call, put }) {  // eslint-disable-line
+      const results = yield call(fetchTagListI, payload);
+      const { code, data } = results;
+      let tagList = [];
+      if (code === 200) {
+        tagList = getTagsCount(data);
+        tagList = genertorColor(tagList, COLOR_LIST);
+      }
 
       if (typeof callback === 'function') {
-            callback(results);
-          }
-      yield put({ type: 'saveTaglist',payload:results });
-    },
-   
-    // *findByUsername({payload,callback},{call}){
-    //   const results=yield call(fetchByUserNameI,payload);
-     
-    //   if (typeof callback === 'function') {
-    //     callback(results);
-    //   }
-    // },
-    
+        callback({tagList});
+      } else {
+        yield put({ type: 'saveTagList',payload: results });
+      }
+    }
   },
 
   reducers: {
-    saveTaglist(state, action) {
-      const {message,data} = action.payload
-      let  tagList =[]
-      if(message==='SUCCESS'){
-        const taglst=getTagsCount(data.list)
-         tagList = genertorColor(taglst, COLOR_LIST)
-       // tagList= 
-
-       
-      }
-       
-     
-
-      return { ...state, tagList:tagList };
+    save(state, action) {
+      return { ...state, ...action.payload }
     },
-    
-    }
+    saveTagList(state, action) {
+      const { message, data } = action.payload
+      let  tagList = []
+      if(message === 'SUCCESS'){
+        const taglst = getTagsCount(data.list);
+         tagList = genertorColor(taglst, COLOR_LIST);
+      }
 
-   
+      return { ...state, tagList };
+    },
+    }
 };

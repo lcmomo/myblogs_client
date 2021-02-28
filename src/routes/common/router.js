@@ -26,25 +26,26 @@
 //     path : '/',
 //     component:()=> (import('../../App.js')),
 //     name:'ad',
-    
+
 //     model:[]
 //   }
-  
+
 // ]
 
-export const RouteConfig=[
+export const RouteConfig = [
   // web页面
   {
-    path:'/web',
-    component:()=>(import('../../layout/web')),
-    name:'webhome',
-    model:[],
-    routes:[
+    path: '/web',
+    component: () => (import('../../layout/web')),
+    name: 'webHome',
+    model: [import('../../models/user.js'), import('../../models/article.js'), import('../../models/tag.js')],
+    routes: [
       {
         path : '/web/home',
-        component: ()=> (import('../../views/web/home/home.js')),
-        name:'home',
-        model:[]
+        redirect: true,
+        component: () => (import('../../views/web/home/home.js')),
+        name: 'home',
+        model: [import('../../models/user.js')]
       },
       // {
       //   path : '/web/archives',
@@ -52,12 +53,12 @@ export const RouteConfig=[
       //   name:'archives',
       //   model:[]
       // },
-      // {
-      //   path : '/web/article/:id',
-      //   component: ()=> (import('../../views/web/article/article.js')),
-      //   name:'article',
-      //   model:[]
-      // },
+      {
+        path : '/web/article/:id',
+        component: ()=> (import('../../views/web/article/article.js')),
+        name:'article',
+        model: [import('../../models/user.js'), import('../../models/article.js'), import('../../models/discuss.js')]
+      },
       // {
       //   path : '/web/categories/:name',
       //   component : ()=> (import('../../views/web/categories/categories.js')),
@@ -82,24 +83,17 @@ export const RouteConfig=[
       //   name:'tags',
       //   model:[]
       // },
-      // {
-      //   path : '/web/about',
-      //   component : ()=> (import('../../views/web/about/about.js')),
-      //   name:'about',
-      //   model:[]
-      // },
-      
+      {
+        path : '/web/about',
+        component : ()=> (import('../../views/web/about/about.js')),
+        name:'about',
+        model:[]
+      },
+
     ]
    },
 
-  {
-    path : '/ad',
-    component:()=> (import('../../App.js')),
-    name:'ad',
-    
-    model:[]
-  },
-
+  
   // {
   //   path : '/admin',
   //   component:()=> (import('../../layout/admin')),
@@ -120,4 +114,12 @@ export const RouteConfig=[
       
   //   ]
   // },
+
+  {
+    path : '/',
+    component:()=> (import('../../App.js')),
+    name:'ad',
+    model:[],
+    routes: []
+  },
 ]

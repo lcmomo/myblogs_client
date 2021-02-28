@@ -1,90 +1,88 @@
-import React, { useState } from 'react'
-import { connect } from 'dva'
-import PropType from 'prop-types'
 
-import axios from '../../utils/axios'
-import moment from 'moment'
-import AppAvatar from '../../components/Avatar'
+import React, { Component, useState } from 'react';
+import { connect } from 'dva';
+import PropTypes from 'prop-types';
 
-import { Comment, Button,Tooltip, Input, Icon, Popconfirm, message } from 'antd'
+import { translateMarkdown } from '../../utils';
+import moment from 'moment';
+import AppAvatar from '../../components/Avatar';
+import { Comment, Button, Tooltip, Input, Icon, Popconfirm, mesage, message } from 'antd';
+import { identical } from 'ramda';
+const { TextArea } = Input;
 
-const { TextArea } =  Input
 
 function CommentItem(props) {
-  const {  children, item, userInfo, articleId, commentId, replyId,replyVisible } = props
+  const { children, item, userInfo, articleId, commentId, replyId, replyVisible } = props
   const { user } = item
-  const [value,setValue] =useState('')
+  const [value, setValue] = useState('')
 
-  function handleChange(e){
+  function handleChange(e) {
     setValue(e.target.value)
   }
-  function handleKeyUp(e){
-    if(e.ctrlKey && e.keyCode === 13) {
-      onsubmit()
+
+  function handleKeyUp(e) {
+    if (e.ctrlKey && e.keyCode === 13) {
+      onSubmit()
     }
   }
-
-  function onsubmit(){
-    if(!userInfo.userId){
-      return message.warn('您未登陆,请登陆后评论')
-    }
-    axios.post('/discuss',{
+  function onSubmit() {
+    if (!userInfo.userId) return message.warn('您未登录，请登录后再试');
+    const params = {
       userId: userInfo.userId,
       articleId,
       content: value.trim(),
       commentId
-    }).then(res => {
-      props.onReply({ commentId: 0, replyId: 0 })
-      props.setCommentList(res.rows)
-    })
+    }
+    props.onSubmit(params);
+
   }
 
-  // delete discuss
   function onDelete() {
     if (replyId) {
-      axios.delete(`/discuss/reply/${replyId}`).then(() => {
-        const commentList = [...props.commentList]
-        const tagetComment = commentList.find(c => c.id === commentId)
-        tagetComment.replies = tagetComment.replies.filter(r => r.id !== replyId)
-        props.setCommentList(commentList)
-      })
+      props.onDelete({ id: replyId, type: 'reply', commentId });
     } else {
-      axios.delete(`/discuss/comment/${commentId}`).then(() => {
-        let commentList = [...props.commentList]
-        commentList = commentList.filter(c => c.id !== commentId)
-        props.setCommentList(commentList)
-      })
+      props.onDelete({ id: commentId , type: 'comment', commentId })
     }
   }
 
   function handleReply() {
-    props.onReply({ commentId, replyId })
+    props.onReply({ commentId, replyId});
   }
-
 
   return (
     <Comment
-      actions={[
-        <span onClick={handleReply}>Reply to</span>,
-        <>
-          {userInfo.role === 1 && (
-            <Popconfirm title={'是否删除该留言？'} cancelText='取消' okText='确认' onConfirm={onDelete}>
-              <Icon type='delete' className='icon-delete' />
-            </Popconfirm>
-          )}
-        </>
-      ]}
-      author={<span>{user && user.username}</span>}
-      avatar={<AppAvatar userInfo={user} />}
-      content={
-        <div className='article-detail' dangerouslySetInnerHTML={{ __html: translateMarkdown(item.content, true) }} />
+      actions={
+        [
+          <span onClick={handleReply}>Reply to</span>,
+          <>
+          {
+            userInfo.role === 1 && (
+              <Popconfirm
+                title={'是否删除该留言? '}
+                cancelText='取消'
+                okText='确认'
+                onConfirm={onDelete}
+              >
+                <Icon type='delete' className='icon-delete' />
+              </Popconfirm>
+            )
+          }
+          </>
+        ]
       }
-      datetime={
-        <Tooltip title={item.createdAt}>
-          <span>{moment(item.createdAt).fromNow()}</span>
-        </Tooltip>
-      }>
-      {replyVisible && (
+    author={<span>{ user && user.username }</span>}
+    avatar={<AppAvatar userInfo={user} />}
+    content={
+      <div className='article-detail' dangerouslySetInnerHTML={{__html: translateMarkdown(item.content, true)}} />
+    }
+    datetime={
+      <Tooltip title={item.createdAt}>
+        <span>{ moment(item.createdAt).fromNow()}</span>
+      </Tooltip>
+    }
+  >
+    {
+      replyVisible && (
         <div className='reply-form'>
           <TextArea
             placeholder={`回复${item.user.username}...`}
@@ -99,17 +97,16 @@ function CommentItem(props) {
             </Button>
           </div>
         </div>
-      )}
-      {children}
-    </Comment>
+      )
+    }
+    { children }
+  </Comment>
   )
 }
 
-@connect(state => ({
-  userInfo: state.user,
-  colorMap: state.app.colorMap
-}))
-class CommentList extends React.Component {
+
+@connect(({ user, init, discuss })=> ({ user, init, discuss }))
+class CommentList extends Component{
   static propTypes = {
     commentList: PropTypes.array,
     articleId: PropTypes.number,
@@ -124,47 +121,105 @@ class CommentList extends React.Component {
   }
 
   setReplyTarget = replyTarget => {
-    this.setState({ replyTarget })
+    this.setState({ replyTarget });
   }
 
-  render() {
-    const { commentList, userInfo, colorMap, articleId } = this.props
-    const { replyTarget } = this.state
+  onSubmit(params) {
+    this.props.dispatch({
+      type: 'discuss/addDiscuss',
+      payload: { ...params },
+      callback: res => {
+        console.log("callback res", res);
+        message.success("评论成功");
+        const { code, data } = res;
+        this.setReplyTarget({ commentId: 0, replyId: 0 });
+        this.props.setCommentList(data && data.rows);
+      }
+    })
+  }
+
+  onDelete({id = null, type, commentId}) {
+    if (type === 'reply') {
+      this.props.dispatch({
+        type: 'discuss/deleteReply',
+        payload: id,
+        callback: (res ) => {
+          const { code } = res;
+          if (code === 200) {
+            const commentList = [ ...this.props.commentList ];
+            const targetComment = commentList.find(c => c.id === commentId );
+            targetComment.replies = targetComment.replies.filter(r => r.id !== id);
+            this.props.setCommentList(commentList);
+            message.success('删除回复成功');
+          } else {
+            message.error('删除失败')
+          }
+        }
+      })
+    } else if (type === 'comment') {
+      this.props.dispatch({
+        type: 'discuss/deleteComment',
+        payload: id,
+        callback: (res) => {
+          if (res.code === 200) {
+            let commentList = [ ...this.props.commentList];
+            commentList = commentList.filter(c => c.id !== id);
+            this.props.setCommentList(commentList);
+            message.success('删除评论成功')
+          } else {
+            message.error('删除失败');
+          }
+        }
+      })
+    }
+  }
+
+  render () {
+    const { commentList, userInfo, articleId, setCommentList } = this.props;
+    const { replyTarget } = this.state;
 
     return (
       <div className='discuss-list'>
-        {commentList.map(comment => (
-          <CommentItem
-            item={comment}
-            key={comment.id}
-            articleId={articleId}
-            userInfo={userInfo}
-            commentId={comment.id}
-            setCommentList={this.props.setCommentList}
-            commentList={this.props.commentList}
-            onReply={this.setReplyTarget}
-            replyVisible={replyTarget.commentId === comment.id && !replyTarget.replyId}>
-            {comment.replies.map(reply => (
-              <CommentItem
-                item={reply}
-                key={reply.id}
-                articleId={articleId}
-                userInfo={userInfo}
-                commentId={comment.id}
-                replyId={reply.id}
-                setCommentList={this.props.setCommentList}
-                commentList={this.props.commentList}
-                onReply={this.setReplyTarget}
-                replyVisible={replyTarget.commentId === comment.id && replyTarget.replyId === reply.id}
-              />
-            ))}
-          </CommentItem>
-        ))}
+        {
+          commentList.map(comment => (
+            <CommentItem
+              item={comment}
+              key={comment.id}
+              articleId={articleId}
+              userInfo={userInfo}
+              commentId={comment.id}
+              setCommentList={ setCommentList }
+              commentList={commentList}
+              onReply={this.setReplyTarget}
+              onSubmit={ (params) => this.onSubmit(params)}
+              onDelete={ (params) => this.onDelete(params)}
+              replyVisible={replyTarget.commentId === comment.id && !replyTarget.replyId}
+            >
+              {
+                comment.replies && comment.replies.map(reply => (
+                  <CommentItem
+                    item={reply}
+                    key={reply.id}
+                    articleId={articleId}
+                    userInfo={userInfo}
+                    commentId={comment.id}
+                    replyId={reply.id}
+                    setCommentList={ setCommentList }
+                    commentList={commentList}
+                    onReply={this.setReplyTarget}
+                    onSubmit={ (params) => this.onSubmit(params)}
+                    onDelete={ (params) => this.onDelete(params)}
+                    replyVisible={replyTarget.commentId === comment.id && replyTarget.replyId === reply.id}
+                  />
+                ))
+              }
+            </CommentItem>
+          ))
+        }
       </div>
     )
   }
+
 }
 
-export default CommentList
-
-
+export default CommentList;

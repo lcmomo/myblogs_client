@@ -1,8 +1,10 @@
-import xss from 'xss'
-import marked from 'marked'
-import hljs from 'highlight.js'
-import { clear, get } from './storage'
+import xss from 'xss';
+import marked from 'marked';
+import hljs from 'highlight.js';
+import { clear, get } from './storage';
 
+import { ITEM_NAME } from '../config.js';
+import pathToRegexp from 'path-to-regexp';
 
 
 
@@ -15,7 +17,7 @@ export function isExternal(path) {
 }
 
 //获取运行环境
-export const getItemEnv=()=>{
+export const getItemEnv = () => {
   return process.env.NODE_ENV;
 }
 
@@ -25,10 +27,10 @@ export function getToken() {
   const userInfo = get('userInfo')
 
   if (userInfo && userInfo.token) {
-    token = 'Bearer ' + userInfo.token
+    token = 'Bearer ' + userInfo.token;
   }
 
-  return token
+  return token;
 }
 
 /**
@@ -62,31 +64,28 @@ export const groupBy = (arr, f) => {
 
 
 //统计每个标签及数目
-export const getTagsCount=(rowList) => {
- 
+export const getTagsCount = (rowList) => {
+
   let resList=[]
-  
+
   let tagNameList=[]
-  rowList.forEach((row,index)=>{
-    let tag={}
+  rowList.forEach((row, index)=>{
+    let tag = {}
     // console.log(row.tagName)
-    if((tagNameList.indexOf(row.tagName)<0)){
-      tag.tagName=row.tagName
-      tag.count=1;
-      tagNameList.push(row.tagName)
+    if ((tagNameList.indexOf(row.name) < 0)) {
+      tag.name = row.name
+      tag.count = 1;
+      tagNameList.push(row.name)
       // console.log(tagNameList)
       resList.push(tag)
-     
+
       //resList[row.tagName].count++
-    }else{
-       
-        resList.forEach((r,idx)=>{
-          if(r.tagName==row.tagName){
-            r.count++;
+    }else {
+        resList.forEach((r, idx) => {
+          if (r.namea = row.tagName){
+            r.count ++;
           }
-          
         })
-      
     }
 //     console.log(tagNameList)
 }
@@ -127,14 +126,22 @@ export const translateMarkdown = (plainText,isGuardXss = false)=> {
 
 // 计算 评论数
 export const calcCommentsCount = commentList => {
-  let count =0
-  if(commentList){
+  let count = 0;
+  if (commentList) {
   commentList.forEach(item => {
-    
-    if (item.replyList){
-      count+=item.replyList.length
+
+    if (item.replies){
+      count += item.replies.length;
     }
   })
 }
-  return count
+  return count;
+}
+
+export const baseUrl =  getItemEnv() === "development" ? `http://www.llchaoblogs.work:3002` : `http://www.llchaoblogs.work:3002`
+
+
+export const pathParams = (urlPattern, pathname) => {
+  const match = pathToRegexp(urlPattern).exec(pathname);
+  return match;
 }

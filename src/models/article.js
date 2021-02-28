@@ -1,90 +1,84 @@
 
-import {get,remove,save } from '../utils/storage'
-import {fetchArticleListI,fetchByKeywordsI} from '../services/article'
+import {get, remove, save } from '../utils/storage'
+import { fetchArticleListI, fetchByKeywordsI, fetchArticleDetailI } from '../services/article';
+import { fetchTagListI } from '../services/tag';
 
 import { COLOR_LIST } from '../utils/constant'
-import { randomIndex,getTagsCount } from '../utils/index'
+import { randomIndex, getTagsCount } from '../utils/index'
 
 
 // 生成 color
-function genertorColor(list = [], colorList = []) {
-  
-  const _list = [...list].sort((x, y) => y.count - x.count)
+export const genertorColor = (list = [], colorList = [])  =>  {
+
+  const _list = [...list].sort((x, y) => y.count - x.count);
   _list.forEach((l, i) => {
-    l.color = colorList[i] || colorList[randomIndex(colorList)]
+    l.color = colorList[i] || colorList[randomIndex(colorList)];
   })
- 
-  return _list
+
+  return _list;
 }
-
-const userInfo = get('userInfo')
-
-let defaultState={
-  userInfo: {
-            username:'',
-            role:1,
-            userid:0,
-            github:null
-          },
-}
-
-if (userInfo) {
-  defaultState = { ...defaultState, ...userInfo }
-}
-
 
 export default {
 
   namespace: 'article',
 
-
-    state:{
-      articleList:[]
-    },
+  state: {
+    articleList: []
+  },
   subscriptions: {
     setup({ dispatch, history }) {  // eslint-disable-line
     },
   },
 
   effects: {
-    *fetchArticleList({ payload,callback }, { call, put }) {  // eslint-disable-line
-      const results=yield call(fetchArticleListI,payload);
-    
+    *fetchArticleList({ payload, callback }, { call, put }) {  // eslint-disable-line
+      const results = yield call(fetchArticleListI, payload);
+      // const tagResult = yield call(fetchTagListI);
+      // const categoryList = yield call()
+      const { data, message, code } = results
+      let  articleLst = []
+      let tagColorList = []
+      let categoryList = []
+      if (code === 200){
+        // tagColorList = genertorColor(tagResult.data, COLOR_LIST)
+        articleLst = data.rows
+        categoryList = genertorColor(data.rows, COLOR_LIST)
+      }
 
       if (typeof callback === 'function') {
-            callback(results);
-          }
-      yield put({ type: 'saveArticlelist',payload:results });
-    },
-   
-    *findBKeywords({payload,callback},{call,put}){
-  
-      const results=yield call(fetchByKeywordsI,payload);
-      yield put({type:'saveArticlelist',payload:results})
-      if (typeof callback === 'function') {
-        callback(results);
+        callback({ articleList: articleLst, categoryList, tagColorList, total: data.count, pageNum: data.pageNum, pageSize: data.size });
+      } else {
+        yield put({ type: 'saveArticleList', payload: results });
       }
     },
-    
+
+    *fetchArticleDetail({ payload, callback }, { call, put }) {
+      const results = yield call(fetchArticleDetailI, payload);
+      const { data, message, code } = results;
+      if (code === 200) {
+        if (typeof callback === 'function') {
+          callback(data);
+        } else {
+          yield put({ type: 'saveArticle', payload: results });
+        }
+      }
+    }
+
   },
 
   reducers: {
-    saveArticlelist(state, action) {
-      const { message,data } = action.payload
-      let  articleList =[]
+    saveArticleList(state, action) {
+      const { message, data, code } = action.payload
+      let  articleLst = []
       let tagList = []
-      let categotyList = []
-      if(message==='SUCCESS'){
-        tagList = genertorColor(data.list, COLOR_LIST)
-        articleList=data.list
-        categotyList = genertorColor(data.list, COLOR_LIST)
-        
-       
-      }
-       
-     
+      let categoryList = []
+      if (code === 200){
+        tagList = genertorColor(data.rows, COLOR_LIST)
+        articleLst = data.rows
+        categoryList = genertorColor(data.rows, COLOR_LIST)
 
-      return { ...state, articleList:articleList ,categotyList, tagList,total:data.total, pageNum:data.pageNum, pageSize: data.size};
+      }
+      return { articleList: articleLst ,categoryList, tagList,total: data.count, pageNum:data.pageNum, pageSize: data.size};
     },
 
     findByKey(state,action){
@@ -92,9 +86,13 @@ export default {
       return {
         articleList:data.list
       }
+    },
+
+    saveArticle (state, action) {
+      const { message, data, code } = action.payload;
+      return { ...state, data }
     }
-    
     }
 
-   
+
 };

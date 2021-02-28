@@ -7,14 +7,14 @@ import {GITHUB} from '../../config'
 
 import { save, remove } from '../../utils/storage'
 import FormBuilder from '../FormBuilder'
-import {encrypt} from '../../utils/aesutil'
+import { encrypt } from '../../utils/aesutil'
 
 
 function SignModal(props){
-  const {type,visible,onCancel} =props
-  
-  
- 
+  console.log("sign props: ", props)
+  // const {type, onCancel, visible } = props;
+  const { signModal: { type, visible }} = props.init;
+  // const [visible, setVisible] = useState(props.visible)
   useEffect(() => {
     // console.log(props.visible, 'componentDidMount and componentDidUpdate')
     props.visible && props.form.resetFields()
@@ -32,7 +32,6 @@ function SignModal(props){
   }
 
   function validateUsername(rule,value,callback){
-     
     props.dispatch({
       type:'user/findByUsername',
       payload:{username:value},
@@ -42,13 +41,12 @@ function SignModal(props){
       }
       }
     })
-  
-    
+
     callback();
 }
 
 function validateEmail(rule,value,callback){
-     
+
   props.dispatch({
     type:'user/findUserByEmail',
     payload:{email:value},
@@ -61,8 +59,6 @@ function validateEmail(rule,value,callback){
   callback();
 
 }
-  
-  
 
   //生成表单
   const getMeta= type => {
@@ -90,7 +86,6 @@ function validateEmail(rule,value,callback){
       elements = [
         {
           key: 'userid',
-          
           widget: <Input placeholder='请输入用户编号' type="hidden"/>,
           rules: [{ required: true, message: 'Userid is required' }],
           validateTrigger:'onBlur',
@@ -101,7 +96,7 @@ function validateEmail(rule,value,callback){
           label: '用户名',
           widget: <Input placeholder='请输入用户名' />,
           rules: [{ required: true, message: 'Username is required' }, 
-          { validator: validateUsername }
+          // { validator: validateUsername }
         ],
           validateTrigger:'onBlur'
         },
@@ -126,7 +121,7 @@ function validateEmail(rule,value,callback){
           rules: [
             { type: 'email', message: 'The input is not valid E-mail!' },
             { required: true, message: 'Please input your E-mail!' },
-            { validator: validateEmail }
+            // { validator: validateEmail }
           ],
           validateTrigger:'onBlur'
         }
@@ -153,16 +148,15 @@ function validateEmail(rule,value,callback){
 
 
   function handleSubmit(e){
-    
+
     e.preventDefault()
-    console.log(e)
+    // console.log(e)
     props.form.validateFields((errors, values) => {
-      
+
       if (errors) {
-       
+       console.log('errors: ', errors);
         return
       }
-     
       if (type === 'login') {
         props.dispatch({
           type:'user/login',
@@ -170,38 +164,35 @@ function validateEmail(rule,value,callback){
             ...values,
             // password: encrypt(values.password)
           },
-          callback:(res)=>{
-           
-            if(res.message==='SUCCESS'){
+          callback: (res)=>{
+            // console.log("res: ", res)
+            if(res.code === 200){
               const user=res.data;
-             
                 // localStorage.setItem('user',JSON.stringify(user));
                 // localStorage.setItem('token',JSON.stringify(res.data.token));
-                    Message.success('登录成功')  
-                }
-            else{
-                if(res.message==='err')
-                    Message.error("密码错误，请重试");
-                else if(res.message==='unregister'){
-                    Message.error("您还未注册，请先注册");
-                    
-                }
+              Message.success(res.message);
+              props.dispatch({ type: 'init/switchSignModal', payload: { visible: false }})
+            } else {
+                Message.error(res.message);
             }
-
           }
-
-        }).then(props.succeedCallBack)
+        })
       } else if (type === 'register'){
         props.dispatch({
-          type:'user/createUser',
+          type:'user/register',
           payload:{
               ...values,
-              password:encrypt(values.password)
+              // password:encrypt(values.password)
           },
           callback:(res)=>{
-            Message.success("注册成功")
+            if (res.code === 200) {
+              Message.success("注册成功");
+              props.dispatch({ type: 'init/switchSignModal', payload: { visible: false }})
+            } else {
+              Message.error(res.message);
+            }
           }
-        }).then(props.succeedCallBack)
+        });
       }
     })
   }
@@ -213,11 +204,14 @@ function validateEmail(rule,value,callback){
   }
 
   return (
-    <Modal width={460} title={type} visible={visible} onCancel={onCancel}
-     footer={null}>
+    <Modal width={460} title={type} visible={visible}
+     footer={ null } maskClosable
+    //  onCancel = {()=> props.onCancel()}
+    onCancel = {e => props.dispatch({ type: 'init/switchSignModal', payload: { visible: false }})}
+     >
       <Form layout='horizontal'>
         <FormBuilder meta={getMeta(type)} form={props.form} />
-        <Button type='primary' block htmlType='submit' onClick={handleSubmit}>
+        <Button type='primary' block  onClick={handleSubmit}>
           {type}
         </Button>
         {GITHUB.enable && (
@@ -232,4 +226,4 @@ function validateEmail(rule,value,callback){
 }
 
 
-export default connect(({init,user})=>({user,init}))(Form.create()(withRouter(SignModal)))
+export default connect(({ init, user })=>({ user, init }))(Form.create()(withRouter(SignModal)))

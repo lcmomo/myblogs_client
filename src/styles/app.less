@@ -1,3 +1,4 @@
+
 .app-container {
   .app-header {
     padding: 0;
@@ -23,7 +24,7 @@
         display: none;
       }
       .search-input {
-        width: calc(100vw - 50px);
+        width: calc(~"100vw - 50px");
         border: none;
         border-bottom: 1px solid #ddd;
       }
@@ -101,8 +102,9 @@
 
   .app-sidebar {
     border-right: 1px solid #ebedf0;
-    //height: calc(100vh - 64px - 40px);
-    height: 450px;
+    height: calc(~"100vh - 64px - 40px");
+    // height: 450px;
+    // height: @app-side-height;
     text-align: center;
     color: rgba(0, 0, 0, 0.65);
     overflow-y: auto;
@@ -189,8 +191,7 @@
     padding: 40px 0 0;
     position: relative;
     .app-main {
-      //height: calc(100vh - 64px - 40px);
-      height: 450px;
+      height: calc(~"100vh - 64px - 40px");
       overflow: auto;
       -webkit-overflow-scrolling: touch;
       box-sizing: border-box;
@@ -225,7 +226,7 @@
 
 @media screen and (max-width: 736px) {
   .ant-divider-inner-text {
-    max-width: calc(100vw - 77px);
+    max-width: calc(~"100vw - 77px");
     overflow: auto;
     text-overflow: ellipsis;
   }
