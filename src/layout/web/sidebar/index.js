@@ -63,7 +63,7 @@ export default class SideBar extends Component {
 
   }
 
-  async getArticleList() {
+  getArticleList() {
     // try {
     //   axios.get('http://localhost:3002/article/list', { params: { order: 'viewCount DESC', page: 1, pageSize: 6 } }).then(res => {
     //     console.log(res);
@@ -74,7 +74,7 @@ export default class SideBar extends Component {
     // } catch (error) {
     //   console.error(error)
     // }
-    await this.props.dispatch({
+    this.props.dispatch({
       type: 'article/fetchArticleList',
       payload: {
         pageSize: 6,
