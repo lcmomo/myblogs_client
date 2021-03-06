@@ -41,12 +41,10 @@ function SignModal(props){
       }
       }
     })
-
     callback();
 }
 
 function validateEmail(rule,value,callback){
-
   props.dispatch({
     type:'user/findUserByEmail',
     payload:{email:value},
