@@ -3,7 +3,6 @@ import {BrowserRouter,Route,Switch, Redirect} from 'dva/router';
 import { connect } from 'dva'
 
 
-
  class App extends Component {
      componentDidMount(){
          console.log("app did mount")
