@@ -12,30 +12,44 @@
     .trigger:hover {
       color: #1890ff;
     }
+
     .header-right {
       float: right;
       line-height: 64px;
       margin-right: 10px;
     }
   }
+  .header-title {
+    font-size: 24px;
+    color:#fff;
+    height:64px;
+    text-align: center;
+    line-height: 64px;
+    font-family: 'Courier New', Courier, monospace;
+  }
 
-  .admin-main {
-    overflow-y: scroll;
+  .admin-content-wrap {
     padding: 24px;
-    // background-color: #fff;
-    .query-form {
-      margin-bottom: 20px;
-      .form-select {
-        min-width: 140px;
+    height: calc(~"100vh - 64px");
+    .admin-main {
+      overflow-y: scroll;
+      padding: 24px;
+      position: relative;
+      background-color: #fff;
+      .query-form {
+        margin-bottom: 20px;
+        .form-select {
+          min-width: 140px;
+        }
       }
-    }
-    .delete-text {
-      cursor: pointer;
-      color: red;
-    }
-    .app-pagination {
-      float: right;
-      margin: 20px 0;
+      .delete-text {
+        cursor: pointer;
+        color: red;
+      }
+      .app-pagination {
+        float: right;
+        margin: 20px 0;
+      }
     }
   }
 }

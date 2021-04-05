@@ -1,12 +1,11 @@
-import React,{useState,Component} from 'react'
-import { Layout } from 'antd'
-import {Switch,Route ,exact} from  'dva/router'
+import React,{ Component } from 'react';
+import { Layout } from 'antd';
+import {Switch } from  'dva/router';
 import AdminSideBar from './sidebar'
 import AdminHeader from './header'
-import SubRoutes,{ RedirectRoute,NoMatchRoute }from '../../utils/SubRoutes.js'
+import SubRoutes from '../../utils/SubRoutes.js'
 
-import ArticleManager from '../../views/admin/article/manager/index'
- const { Sider,Header,Content,Footer } = Layout
+ const { Sider, Header,Content,Footer } = Layout
 
 // const AdminLayout = props =>{
 
@@ -58,35 +57,34 @@ export default class AdminLayout extends Component {
     }
   }
   render() {
-    const {app,routes}=this.props
-    
-    const {collapsed,collapsible} =this.state
+    const { app, routes, location } = this.props;
+
+    const {collapsed } =this.state;
     return (
     <Layout className='admin-container'>
        <Sider collapsible trigger={null} collapsed={collapsed}>
-         <AdminSideBar />
+         <AdminSideBar  selectedKeys={[location.pathname]} collapsed={collapsed} />
        </Sider>
        <Layout>
          <Header className='admin-header'>
-           <AdminHeader collapsed={collapsed} onToggle={e => this.setState({collapsed:!collapsed})} />
+           <AdminHeader collapsed={collapsed} onToggle={e => this.setState({ collapsed: !collapsed })} />
          </Header>
-         <Content className='admin-main'>
-          
-           <Switch>
-                 {routes.map((route, i) => (
-                  
-                   
-                  // 调用封装组件
-                <SubRoutes key={i} {...route} app={app}  />
-                ))}
+          <Layout className='admin-content-wrap'>
+            <Content className='admin-main'>
 
-{/* <NoMatchRoute /> */}
-                {/* <Route path='article/manager' component={ArticleManager} /> */}
+              <Switch>
+                    {routes.map((route, i) => (
 
-           </Switch>
-           
-        </Content>
-        {/* <Footer style={{ textAlign: 'center' }}>React-Admin ©2019 Created by gershonv@163.com </Footer> */}
+                      // 调用封装组件
+                    <SubRoutes key={i} {...route} app={app}  />
+                    ))}
+
+    {/* <NoMatchRoute /> */}
+              </Switch>
+
+            </Content>
+          </Layout>
+        <Footer style={{ textAlign: 'center' }}>Myblogs ©2021 Created by lcmomo </Footer>
       </Layout>
     </Layout>
   )

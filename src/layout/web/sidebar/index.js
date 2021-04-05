@@ -1,10 +1,10 @@
-import React, { useEffect, useState, Component }from 'react'
+import React, { Component }from 'react'
 import { SIDEBAR } from '../../../config.js'
 // import { request } from '../../../utils/axios'
 import { Icon, Divider, Tag } from 'antd';
 import { connect } from 'dva';
 //components
-import { Link, withRouter } from 'dva/router';
+import { Link } from 'dva/router';
 import Href from '../../../components/Href';
 
 // import axios from 'axios';
@@ -109,7 +109,7 @@ export default class SideBar extends Component {
             </li>
           ))}
         </ul>
-        <Divider orientation='left'>热门文章</Divider>
+        <Divider orientation='left'>推荐</Divider>
         <ul className='article-list'>
 
         { articleList && articleList.map(d => (

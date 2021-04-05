@@ -1,37 +1,4 @@
 
-
-// export const RouteConfig=[
-//   //web页面
-//   {
-//     path:'/ad',
-//     component:()=>(import('../IndexPage.js')),
-//     name:'home',
-    
-
-//     model:[],
-//   //   routes:[
-//   //     {
-//   //       path : '/ad',
-//   //       component : ()=> import('../IndexPage.js'),
-//   //       name:'',
-//   //       model:[import('../../models/init.js')]
-//   //     },
-//   //     {
-
-//   //     }
-//   //   ]
-//    },
-
-//   {
-//     path : '/',
-//     component:()=> (import('../../App.js')),
-//     name:'ad',
-
-//     model:[]
-//   }
-
-// ]
-
 export const RouteConfig = [
   // web页面
   {
@@ -92,28 +59,34 @@ export const RouteConfig = [
 
     ]
    },
-
-  
-  // {
-  //   path : '/admin',
-  //   component:()=> (import('../../layout/admin')),
-  //   name:'adminhome',
-    
-  //   model:[import('../../models/user.js')],
-  //   routes:[
-  //     {
-  //       path:'/admin/article/manager',
-  //       component:()=>(import("../../views/admin/article/manager")),
-  //       model:[import('../../models/user.js')]
-  //     },
-  //     {
-  //       path:'/admin/',
-  //       component:()=>(import("../../views/admin/home/index")),
-  //       model:[import('../../models/user.js')]
-  //     },
-      
-  //   ]
-  // },
+  {
+    path : '/admin',
+    component:()=> (import('../../layout/admin')),
+    name:'adminhome',
+    model:[import('../../models/user.js')],
+    routes:[
+      {
+        path:'/admin/home',
+        component:()=>(import("../../views/admin/home")),
+        model:[]
+      },
+      {
+        path:'/admin/article/manager',
+        component:()=>(import("../../views/admin/article/manager")),
+        model:[import('../../models/user.js'), import('../../models/article.js')]
+      },
+      {
+        path:'/admin/article/edit/:id',
+        component:()=>(import("../../views/admin/article/edit")),
+        model:[import('../../models/user.js'), import('../../models/article.js'), import('../../models/tag.js')]
+      },
+      {
+        path:'/admin/article/add',
+        component:()=>(import("../../views/admin/article/edit")),
+        model:[import('../../models/user.js'), import('../../models/article.js'), import('../../models/tag.js')]
+      },
+    ]
+  },
 
   {
     path : '/',

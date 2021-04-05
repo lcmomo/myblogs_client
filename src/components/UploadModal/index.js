@@ -1,0 +1,219 @@
+import React, { useState, useEffect } from 'react'
+import { connect } from 'dva';
+import { Modal, Upload, Icon, Checkbox, Typography } from 'antd';
+import { baseUrl } from '../../utils';
+
+// methods
+import { getToken } from '../../utils';
+
+const { Dragger } = Upload;
+const { confirm } = Modal;
+const { Paragraph, Text } = Typography;
+function UploadModal(props) {
+  const { uploadModal: { visible } } = props.init;
+  const [fileList, setFileList] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // confirm modal
+  const [existList, setExistList] = useState([]);
+  const [noExistList, setNoExistList] = useState([]);
+  const [insertSelectedList, setInsertSelectedList] = useState([]); // [fileName]
+  const [updateSelectedList, setUpdateSelectedList] = useState([]);
+  const [confirmVisible, setConfirmVisible] = useState(false);
+
+  useEffect(() => {
+    if (visible) {
+      // reset
+      setInsertSelectedList([]);
+      setUpdateSelectedList([]);
+    }
+  }, [visible]);
+
+  function handleFileChange ({ file, fileList, event }) {
+    const { status } = file;
+    if (status !== 'uploading') {}
+    setFileList(fileList);
+  }
+
+  // confirm selected...
+  function handleSelect(e, item, mode = 'insert') {
+    const checked = e.target.checked;
+    const targetList = mode === 'insert' ? insertSelectedList : updateSelectedList;
+    const list = checked ? [ ...targetList, item ] : targetList.filter(d => d.fileName !== item.fileName)
+    mode === 'insert' ? setInsertSelectedList(list) : setUpdateSelectedList(list);
+  }
+
+  // 点击确认
+  function handleOk (e) {
+    const fileNameList = fileList.map(d => d.name);
+    props.dispatch({
+      type: 'article/checkExist',
+      payload: {
+        fileNameList
+      },
+      callback: (res) => {
+        console.log("res exits： ", res)
+        const { existList, noExist } = res;
+
+        if(existList.length === 0) {
+          // ，没有存在同名文章，直接插入
+          handleConfirm(noExistList);
+        } else {
+          setExistList(existList);
+          setNoExistList(noExistList);
+          // 默认全部勾选
+          setInsertSelectedList(noExistList);
+          setUpdateSelectedList(existList);
+          // open confirm modal
+          setConfirmVisible(true);
+        }
+      }
+    });
+  }
+
+  function handleConfirm (insertList) {
+    try {
+      setLoading(true);
+      props.dispatch({
+        type: 'article/uploadConfirm',
+        payload: {
+          authorId: props.user.userId,
+          insertList: Array.isArray(insertList) ? insertList: insertSelectedList,
+          updateList: updateSelectedList
+        },
+        callback: (res) => {
+          setLoading(false);
+          setConfirmVisible(false);
+          props.dispatch({
+            type: 'init/updateResultModal',
+            payload: {
+              visible: true,
+              result: res
+            }
+          })
+        }
+      });
+    } catch (err) {
+      throw Error(err);
+    }
+  }
+  return (
+    <>
+      <Modal
+        className="upload-modal"
+        visible={visible}
+        title="导入文章"
+        onOk={handleOk}
+        onCancel={e => props.dispatch({
+          type: 'init/switchUploadModal',
+          payload:{
+            visible: false
+          }
+        })}
+        maskClosable={false}
+        destroyOnClose
+        okButtonProps={
+          {
+            disabled: fileList.length === 0,
+            loading
+          }
+        }
+      >
+      <Dragger
+        name="file"
+        multiple
+        action={`${baseUrl}/article/upload`}
+        onChange={handleFileChange}
+        headers={{ Authorization: getToken() }}
+        accept='text/markdown'
+      >
+        <p className='ant-update-drag-icon'>
+          <Icon type='inbox' />
+        </p>
+        <p className='ant-upload-text' >Click or drag file to this area to upload</p>
+        <p className='ant-upload-hint'>
+        Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files
+        </p>
+      </Dragger>
+      </Modal>
+
+      {/* confirm modal */}
+      <Modal
+        className='confirm-modal'
+        visible={confirmVisible}
+        title={
+          <>
+          <Icon type='question-circle' style={{ color: '#faad14', marginRight: 16 }} />
+            confirm your changes
+          </>
+        }
+        onCancel={ e => {
+          setConfirmVisible(false)
+          setLoading(false)
+        }}
+        onOk={handleConfirm}
+        okButtonProps={{
+          disabled: insertSelectedList.length === 0 && updateSelectedList.length === 0
+        }}
+      >
+        <>
+        {
+          noExistList.length > 0 && (
+            <>
+              <Paragraph>
+                <Text strong style={{ fontSize: 16 }}>
+                  插入文章
+                </Text>
+              </Paragraph>
+              <ul>
+                {
+                  noExistList.map((item, index) => (
+                    <li key={index}>
+                      <Checkbox
+                        checked={!!insertSelectedList.find(d => item.fileName === d.fileName)}
+                        onChange={e => handleSelect(e, item, 'insert')}
+                      >
+                        {item.title || item.fileName}
+
+                      </Checkbox>
+                    </li>
+                  ))
+                }
+              </ul>
+            </>
+          )
+        }
+
+        {
+          existList.length > 0 && (
+            <>
+              <Paragraph>
+              <Text strong style={{ fontSize: 16 }}>
+                  更新文章：
+                </Text>
+              </Paragraph>
+              <ul>
+                {
+                  existList.map((item, index) => (
+                    <li key={index}>
+                      <Checkbox
+                        checked={!!updateSelectedList.find(d => item.title === d.title)}
+                        onChange={e => handleSelect(e, item, 'update')}
+                      >
+                        {item.title}
+                      </Checkbox>
+                    </li>
+                  )
+                  )
+                }
+              </ul>
+            </>
+          )
+        }
+        </>
+      </Modal>
+    </>
+  )
+}
+
+export default connect(({ init, article, user }) => ({ init, article, user }))(UploadModal);

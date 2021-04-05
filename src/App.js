@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import {BrowserRouter,Route,Switch, Redirect} from 'dva/router';
 import { connect } from 'dva'
 
 
@@ -47,10 +46,10 @@ import { connect } from 'dva'
     //         return <Switch>{children}</Switch>   
     //  }
 
-     
+
     render() {
         return (<div>APP</div>)
-        
+
     }
 }
 export default connect()(App)

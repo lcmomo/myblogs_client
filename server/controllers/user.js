@@ -179,13 +179,12 @@ const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } =
          });
 
          if (validator) {
-            const { pageNo = 1, PageSize = 10, username} = ctx.query;
+            const { pageNo = 1, pageSize = 10, username} = ctx.query;
             const where = {
                 role: {
                     $not: 1
                 }
             }
-         }
          if (username) {
              where.username['$like'] = `%${username}%`;
          }
@@ -198,6 +197,7 @@ const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } =
          });
          ctx.client(200, 'success', result);
      }
+    }
 
      // 删除
      static async delete(ctx) {

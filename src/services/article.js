@@ -1,3 +1,4 @@
+
 import { stringify } from 'qs';
 import request from '../utils/request.js';
 
@@ -11,7 +12,32 @@ export async function fetchByKeywordsI(params) {
 }
 
 export async function fetchArticleDetailI(params) {
-  console.log(params)
   return request(`/article/${params}`).then(res => res.data)
 }
 
+export async function articleCheckExistI(params) {
+  return request(`/article/checkExist`,{
+    method:'POST',
+    body:{...params},
+  }).then(res=>res.data);
+}
+export async function  deleteArticleByIdI(params) {
+  return request(`/article/${params}`, {
+    method: 'DELETE'
+  }).then(res => res.data);
+}
+
+export async function updateArticleByIdI(params) {
+  const { editId} = params;
+  return request(`/article/${editId}`, {
+    method: 'PUT',
+    body: { ...params }
+  }).then(res => res.data)
+}
+
+export async function createArticleI(params) {
+  return request(`/article/add`, {
+    method: 'POST',
+    body: { ...params }
+  }).then(res => res.data)
+}

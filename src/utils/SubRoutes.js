@@ -1,7 +1,7 @@
 import React from 'react'
-import { Route,Redirect,exact } from 'dva/router';
+import { Route, Redirect } from 'dva/router';
 import dynamic from 'dva/dynamic';
-import {connect} from 'dva'
+import { connect } from 'dva'
 import NoMatch from '../components/NoMatch/NoMatch.js';
 
 

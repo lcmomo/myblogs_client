@@ -1,20 +1,17 @@
 import React, { Component } from 'react';
-import {Layout, Icon, Row, Col, BackTop} from 'antd';
+import {Layout, Row, Col, BackTop} from 'antd';
 import { Switch } from 'dva/router';
 
 import Header from './header'
 import SiderBar from './sidebar'
 
-import SubRoutes,{ RedirectRoute,NoMatchRoute }from '../../utils/SubRoutes'
+import SubRoutes from '../../utils/SubRoutes'
 //响应式
 const siderLayout = { xxl: 4, xl: 5, lg: 5, sm: 0, xs: 0 }
 const contentLayout = { xxl: 20, xl: 19, lg: 19, sm: 24, xs: 24 }
 
  class WebLayout extends Component {
 
-  constructor(props){
-    super(props);
-  }
   render () {
     const { app,routes } = this.props;
     return (

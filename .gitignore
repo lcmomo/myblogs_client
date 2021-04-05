@@ -4,12 +4,6 @@
 node_modules
 /.pnp
 .pnp.js
-<<<<<<< HEAD
-
-# testing
-/coverage
-=======
->>>>>>> dev_useNodejs
 
 # testing
 /coverage
