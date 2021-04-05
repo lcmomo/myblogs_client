@@ -1,14 +1,12 @@
 import React, { Component } from 'react'
 import './article.less'
-import request from '../../../utils/request'
+
 import { translateMarkdown, calcCommentsCount, pathParams } from '../../../utils/index'
 
 // components
-import { Comment, Avatar, Form, Button, Divider, Input, Icon, Menu, Dropdown, message, Modal, Spin, Drawer } from 'antd';
+import { Divider,  Icon, Spin, Drawer } from 'antd';
 import { connect } from 'dva';
-import PropTypes from 'prop-types';
 import ArticleTag from '../../../components/ArticleTag'
-import { AppAvatar } from '../../../components/Avatar';
  import MyIcon from '../../../components/Icon';
 
 import Discuss from '../../../components/Discuss';
@@ -35,8 +33,6 @@ class Article extends Component {
   }
 
   componentDidMount() {
-    const _this = this;
-    const { location: { pathname } } = this.props;
     setTimeout(()=> {
       const target = decodeURI(this.props.location.hash);
       console.log('target: ', target)

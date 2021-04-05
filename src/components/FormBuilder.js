@@ -1,4 +1,4 @@
-import React,{Component,Fragment} from 'react'
+import React,{ Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Col, Form, Icon, Row, Tooltip } from 'antd'
 import { RandomId } from '../utils'
@@ -163,14 +163,14 @@ function FormBuilder(props) {
     return (
       <Fragment key={element.key || element.id}>
         <FormItem {...formItemProps}>
-          {getFieldDecorator(element.key || element.id, fieldProps,{validateTrigger:'onBlur'})(element.widget)}
+          {getFieldDecorator(element.key || element.id, fieldProps)(element.widget)}
         </FormItem>
 
         {props.children && index === elements.length - 1 && (
           <>
             {Array.isArray(props.children) ? (
               props.children.map(item => (
-                <FormItem wrapperCol={wrapperCol} key={RandomId(10)} validateTrigger='onBlur'>
+                <FormItem wrapperCol={wrapperCol} key={RandomId(10)}>
                   {item}
                 </FormItem>
               ))
@@ -179,7 +179,6 @@ function FormBuilder(props) {
                 {props.children}
               </FormItem>
             )}
-            }
           </>
         )}
       </Fragment>

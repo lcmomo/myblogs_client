@@ -1,10 +1,11 @@
-import { API_BASE_URL } from '../config'
+
+import { baseUrl} from './index.js'
 import { getToken } from './index.js'
 
 export default function download(router) {
   const $a = document.createElement('a')
   const token = getToken()
-  $a.href = token ? `${API_BASE_URL}${router}?token=${token}` : `${API_BASE_URL}${router}`
+  $a.href = token ? `${baseUrl}${router}?token=${token}` : `${baseUrl}${router}`
   document.body.appendChild($a)
   $a.click()
   document.body.removeChild($a)

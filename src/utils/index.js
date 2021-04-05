@@ -3,7 +3,6 @@ import marked from 'marked';
 import hljs from 'highlight.js';
 import { clear, get } from './storage';
 
-import { ITEM_NAME } from '../config.js';
 import pathToRegexp from 'path-to-regexp';
 
 
@@ -82,7 +81,7 @@ export const getTagsCount = (rowList) => {
       //resList[row.tagName].count++
     }else {
         resList.forEach((r, idx) => {
-          if (r.namea = row.tagName){
+          if (r.name === row.tagName){
             r.count ++;
           }
         })
@@ -139,7 +138,7 @@ export const calcCommentsCount = commentList => {
 }
 
 
-export const baseUrl =  getItemEnv() === "development" ? `http://localhost:3002` : `http://www.llchaoblogs.work:3002`
+export const baseUrl =  getItemEnv() === "development" ? `http://localhost:3002` : `http://www.llchaoblogs.work:3002`;
 
 export const pathParams = (urlPattern, pathname) => {
   const match = pathToRegexp(urlPattern).exec(pathname);

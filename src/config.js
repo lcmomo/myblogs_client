@@ -1,6 +1,8 @@
 import React from 'react';
 import MyInfo from './views/web/about/MyInfo.js';
+import { baseUrl } from './utils'
 export const LOGO_AVATAR=require('./assets/images/logo.png');
+export const BG_AVATAR = require('./assets/images/logo_bg.jpg'); // 后台管理
 // project config
 export const HEADER_BLOG_NAME = '夙兮执梦'; // header title 显示的名字
 // === sidebar
@@ -26,7 +28,7 @@ export const GITHUB = {
 
 export const ITEM_NAME = "myblogs-1.0";
 
-export const API_BASE_URL = 'http://localhost:8080';
+export const API_BASE_URL = baseUrl;
 
 export const ABOUT = {
   avatar: SIDEBAR.avatar,

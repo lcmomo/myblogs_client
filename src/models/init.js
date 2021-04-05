@@ -1,4 +1,4 @@
-import * as TYPES from './type.js'
+
 export default {
 
   namespace: 'init',
@@ -46,10 +46,10 @@ export default {
 
     //切换上传md文件框
     *switchUploadModal({ payload }, {call, put }) {
-      put({type: 'switchUploadModalR', payload: payload})
+      yield put({type: 'switchUploadModalR', payload: payload})
     },
     *updateResultModal({ payload }, { call, put }) {
-      put({ type: 'updateResultModalR', payload: payload })
+      yield put({ type: 'updateResultModalR', payload: payload })
     }
   },
 
@@ -64,11 +64,11 @@ export default {
       return {...state, windowWidth: action.payload };
     },
     switchSignModalR(state, action){
-      console.log('dispath reducer')
 
       return { ...state,  signModal: action.payload }
     },
     switchUploadModalR(state, action) {
+      console.log("uplaodModual: ", action.payload)
       return { ...state, uploadModal: action.payload };
     },
     updateResultModalR(state, action) {

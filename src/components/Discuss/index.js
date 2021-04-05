@@ -1,11 +1,10 @@
-import React,{Component,Fragment,useState, useEffect} from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import './index.less'
 import { connect } from 'dva'
 
 //methonds
-import axios from '../../utils/axios';
-import { Comment, Avatar, Form, Button, Divider, Input, Icon, Menu, Dropdown, message, Modal } from 'antd'
+import { Comment, Form, Button, Divider, Input, Icon, Menu, Dropdown, message } from 'antd'
 import AppAvatar from '../Avatar';
 import { calcCommentsCount } from '../../utils';
 import List from './list';

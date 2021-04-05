@@ -1,22 +1,35 @@
-import React, { useState, useEffect } from 'react'
-import { NavLink, withRouter } from 'react-router-dom'
+import React from 'react'
+import { NavLink, withRouter } from 'dva/router'
 import { Menu, Icon } from 'antd'
-import menu from './menu'
+import menu from './menu';
+import { BG_AVATAR } from '../../../config'
+
 
 const SubMenu = Menu.SubMenu
 
-function AdminSidebar(props) {
-  const [openKeys, setOpenKeys] = useState([])
-  const [selectedKeys, setSelectedKeys] = useState([])
+function getMenuOpenKeys(menu) {
+  const list = [];
+  menu.forEach(item => {
+    if (item.children) {
+      item.children.forEach(child => {
+        list.push({
+          pathname: child.path,
+          openKey: item.path
+        });
+      });
+    }
+  });
+  return list;
+}
 
-  useEffect(() => {
-    // component did mount
-    //console.log(props.location.pathname)
-  }, [])
+const menuOpenKeys = getMenuOpenKeys(menu);
+
+function AdminSidebar(props) {
 
   // 菜单渲染
   function renderMenu(list) {
     const renderRoute = item => {
+      if (item.hidden) return null;
       if (item.children) {
         return (
           <SubMenu
@@ -46,13 +59,19 @@ function AdminSidebar(props) {
     return list.map(l => renderRoute(l))
   }
 
+  const target = menuOpenKeys.find(d => d.pathname ===  props.selectedKeys[0]);
+  const openKeys = target ? [target.openKey] : []
+
   return (
     <div className='sibar-container'>
+      <div className='header-title'>
+        <img src= { BG_AVATAR } alt='logo' style={{ width:30, height:30, margin: '0 5px', borderRadius: '50%' }} />
+        { props.collapsed ? '': '后台管理' }
+      </div>
       <Menu
-        openKeys={openKeys}
-        selectedKeys={selectedKeys}
-        onOpenChange={openKeys => setOpenKeys(openKeys)}
-        onClick={({ key }) => setSelectedKeys([key])}
+        defaultOpenKeys={openKeys}
+        // openKeys={openKeys}
+        selectedKeys={props.selectedKeys}
         theme='dark'
         mode='inline'>
         {renderMenu(menu)}

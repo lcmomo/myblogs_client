@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './about.less';
 import { Avatar } from 'antd';
 
@@ -14,7 +14,7 @@ import Discuss from '../../../components/Discuss';
   useEffect(() => {
     const fetchList = () => {
       axios.get(`${ baseUrl }/article/-1`).then(res => {
-        const { data: { code, data } } = res;
+        const { data: { data } } = res;
         console.log(" about article: ", data)
         setCommentList(data.comments)
       })

@@ -1,11 +1,12 @@
-import React, { useState, Component } from 'react';
+import React, { Component } from 'react';
 import { Layout, Row, Col, Input, Icon, Menu,  Button, Dropdown,} from 'antd';
 import { connect } from 'dva';
 import { Link, withRouter } from 'dva/router'
 import { HEADER_BLOG_NAME,LOGO_AVATAR } from '../../../config.js';
 import navList from './navList.js';
 import SignModal from '../../../components/SignModal';
-import AppAvatar from '../../../components/Avatar'
+import AppAvatar from '../../../components/Avatar';
+import UploadModal from '../../../components/UploadModal'
 
 const Header = Layout.Header;
 
@@ -17,7 +18,7 @@ const responsiveRight = { xxl: 20, xl: 19, lg: 19, sm: 20, xs: 0 };
 const Logo = () => {
     return (
       <div className='header-left'>
-        <img src={ LOGO_AVATAR } style={{ width: 25, height: 25, marginBottom: 5}}/>
+        <img src={ LOGO_AVATAR } alt="logo" style={{ width: 25, height: 25, marginBottom: 5}}/>
         <span className='blog-name'>{ HEADER_BLOG_NAME }</span>
       </div>
     )
@@ -117,24 +118,32 @@ class WebHeader extends Component {
     })
   }
 
+  switchUploadModal (visible) {
+    this.props.dispatch({
+      type: 'init/switchUploadModal',
+      payload: {
+        visible
+      }
+    })
+  }
+
 
 
   render () {
     const { userInfo, username, github, role } = this.props.user;
   //const {username,github,role } =this.props.userInfo
-    const { SignModalShow, UploadModalShow, ResultModalSHow } = this.state;
  
 
     const MenuOverLay = (
       <Menu>
         {role === 1 && (
           <Menu.Item>
-            <span onClick={e => console.log("导入文章")}>导入文章</span>
+            <span onClick={e => this.switchUploadModal(true)}>导入文章</span>
           </Menu.Item>
         )}
         {role === 1 && (
           <Menu.Item>
-            <span onClick={e => this.props.history.push('/admin')}>后台管理</span>
+            <span onClick={e => this.props.history.push('/admin/article/manager')}>后台管理</span>
           </Menu.Item>
         )}
         <Menu.Item>
@@ -183,8 +192,8 @@ class WebHeader extends Component {
               )}
             {/* { SignModalShow && <SignModal visible = { SignModalShow } onCancel = { () => this.HiddenSignModal() } type={this.state.type} succeedCallBack={ this.HiddenSignModal} /> } */}
             <SignModal />
-              {/* <UploadModal />
-              <ResultModal /> */}
+            <UploadModal />
+              {/* <ResultModal />  */}
             </div>
             {/* 导航 */}
             { this.Navbar() }

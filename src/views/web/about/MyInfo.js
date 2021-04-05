@@ -15,10 +15,10 @@ const MyInfo = () => {
   return (
     <>
       <Divider orientation='left'>简述</Divider>
-      <p>本博客使用技术栈 react + dvajs + antd + koa2 + mysql</p>
+      <p> react  dvajs  antd  koa2 sequelize mysql</p>
       <p>
         源码地址：<Href href='https://github.com/lcmomo/myblogs_client'>github</Href>
-        仅供参考，不做商用
+        仅供个人学习使用，不做他用
       </p>
       <Divider orientation='left'>关于我</Divider>
 

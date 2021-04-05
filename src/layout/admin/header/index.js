@@ -13,11 +13,12 @@ import { Button, Icon, Dropdown, Menu } from 'antd'
 //import { switchSignModal, switchUploadModal } from '@/redux/app/actions'
 
 function AdminHeader(props) {
-  const { collapsed, onToggle, userInfo } = props;
+  console.log(props)
+  const { collapsed, onToggle, user: { userInfo, username, github, role } } = props;
 
 
   function backToHome() {
-    props.history.push('/web')
+    props.history.push('/web/home')
   }
 
   const menu = (
@@ -36,7 +37,7 @@ function AdminHeader(props) {
             // props.loginout()
            props.dispatch({
              type:'user/logout'
-           }).then(()=>backToHome())
+           }).then(()=> backToHome())
           }}>
           退出登录
         </span>
@@ -50,7 +51,7 @@ function AdminHeader(props) {
       <div className='header-right'>
         <Dropdown overlay={menu}>
           <span>
-            <AppAvatar userInfo={props.userInfo} popoverVisible={false} />
+            <AppAvatar userInfo={userInfo} popoverVisible={false} />
             
           </span>
           {/* <span>dev</span> */}
@@ -80,5 +81,5 @@ AdminHeader.propTypes = {
 
 
 export default connect(
-  ({ init,user})=>({userInfo:user.userInfo})
+  ({ init, user})=>({ user })
 )(withRouter(AdminHeader))

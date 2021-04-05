@@ -12,7 +12,6 @@ function genertorColor(list = [], colorList = []) {
   _list.forEach((l, i) => {
     l.color = colorList[i] || colorList[randomIndex(colorList)]
   })
-  console.log(list)
   return _list
 }
 

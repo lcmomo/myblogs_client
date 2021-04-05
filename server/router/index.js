@@ -7,6 +7,7 @@ const ArticleController = require('../controllers/article');
 const TagController = require('../controllers/tag');
 const DiscussController = require('../controllers/discuss');
 
+
 // article router
 const articleRouter = new Router();
 // discuss router
@@ -15,6 +16,12 @@ const discussRouter = new Router();
 
 articleRouter.get('/list', ArticleController.getArticleList); // 获取文章列表
 articleRouter.get('/:id', ArticleController.findById); // 获取文章详情
+articleRouter.post('/checkExist', ArticleController.checkExist); // 确认文章是否存在
+articleRouter.get('/output/all', ArticleController.outputAll); //  导出所有文章
+articleRouter.get('/output/:id', ArticleController.output); // 根据id导出单个文章
+articleRouter.delete('/:id', ArticleController.delete); // 删除指定文章
+articleRouter.put('/:id', ArticleController.update); //  更新文章
+articleRouter.post('/add', ArticleController.create) // 创建文章
 
 discussRouter.post('/', DiscussController.create) // 添加评论
   .delete('/comment/:id', DiscussController.deleteComment) // 删除评论

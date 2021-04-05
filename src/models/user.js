@@ -1,4 +1,3 @@
-import * as TYPES from './type.js'
 import {get, remove, save } from '../utils/storage'
 import {loginI,fetchByUserNameI, fetchUserByEmailI,createUserI, registerI }  from '../services/user'
 
@@ -8,7 +7,7 @@ let defaultState={
   userInfo: {
     username: '',
     role: 1,
-    userid: 0,
+    userId: 0,
     github: null
     },
 }
@@ -79,7 +78,6 @@ export default {
       // console.log('resgister')
       const response=yield call(createUserI,payload);
       //console.log(payload);
-     
       if(response.message==="SUCCESS"){
         if (typeof callback === 'function') {
           callback();

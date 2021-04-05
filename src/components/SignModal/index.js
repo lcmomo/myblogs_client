@@ -1,8 +1,8 @@
-import React,{Component,useState,useEffect} from 'react'
+import React, { useEffect } from 'react'
 import {connect} from 'dva'
 import {withRouter} from 'dva/router'
 import mock from 'mockjs'
-import { Modal, Input, Icon, Message, Button, Form, Alert, Checkbox } from 'antd'
+import { Modal, Input, Message, Button, Form } from 'antd'
 import {GITHUB} from '../../config'
 
 import { save, remove } from '../../utils/storage'

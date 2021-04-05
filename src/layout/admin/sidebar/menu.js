@@ -1,6 +1,6 @@
 const menu = [
   {
-    path: '/admin',
+    path: '/admin/home',
     icon: 'home',
     name: '首页'
   },

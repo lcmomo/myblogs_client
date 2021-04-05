@@ -1,11 +1,11 @@
-import React, { Component,useEffect } from 'react'
+import React, { Component } from 'react'
 
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import moment from 'moment';
 
 // components
-import { Icon, Divider, Empty, Drawer, Tag, Spin } from 'antd';
+import { Divider, Empty, Spin } from 'antd';
 import './home.less';
 import { get ,remove } from '../../../utils/storage';
 import { decodeQuery, translateMarkdown, calcCommentsCount } from '../../../utils/index';
@@ -46,7 +46,6 @@ import Pagination from '../../../components/Pagination';
     async fetchArticleList({ pageNo, pageSize = 10, keyword }){
       const queryParams = { pageNo, pageSize };
       if (keyword) queryParams.keyword = keyword;
-      let res = {}
       this.setState({...this.state, loading: true })
       await this.props.dispatch({
         type: 'article/fetchArticleList',
@@ -55,6 +54,7 @@ import Pagination from '../../../components/Pagination';
         },
         callback: (result) => {
           // this.setState({ ...this.state, ...result, loading: false});
+          console.log("result: ", result)
           this.setState((state) => ({ ...state, ...result, loading: false }))
         }
       }).then(res => {
@@ -118,7 +118,7 @@ import Pagination from '../../../components/Pagination';
     render() {
       const { pageNo, keyword } = decodeQuery(this.props.location.search);
       const { loading } = this.state;
-      const { articleList, total, categoryList, tagColorList }  = this.state;
+      const { articleList, total, tagColorList }  = this.state;
       const list = articleList && articleList.length > 0 ? articleList : this.state.articleList;
       console.log("articleList: ", this.state.articleList)
       console.log("this.state: ", this.state)
@@ -179,8 +179,7 @@ import Pagination from '../../../components/Pagination';
               )
             }
 
-            <Pagination current={pageNo? parseInt(pageNo) : 1} onChange={ (pageNo) => this.handlePageChange(pageNo) } onShowSizeChange={this.handleSizeChange} total={total || this.state.total} windowWith={ 1366  } showSizeChanger />
-
+            <Pagination current={pageNo? parseInt(pageNo, 0) : 1} onChange={ (pageNo) => this.handlePageChange(pageNo) } onShowSizeChange={this.handleSizeChange} total={total || this.state.total} windowWith={ 1366  } showSizeChanger />
           </div>
         </Spin>
       )
