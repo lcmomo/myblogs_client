@@ -27,16 +27,23 @@ discussRouter.post('/', DiscussController.create) // 添加评论
   .delete('/comment/:id', DiscussController.deleteComment) // 删除评论
   .delete('/reply/:id', DiscussController.deleteReply);
 
-router.use('/article', articleRouter.routes());
-router.use('/discuss', discussRouter.routes());
 // tag category
 router.get('/tag/list', TagController.getTagList); // 获取所有的 tag 列表
 
 router.post('/user/login', UserController.login); // 登录
 router.post('/user/register', UserController.register); // 注册
+
+// user
+
 const userRouter = new Router();
 
-userRouter.get('/web/home/list', UserController.getUserList); // 获取用户列表
+userRouter.get('/list', UserController.getUserList); // 获取用户列表
+userRouter.delete('/:userId', UserController.delete); // 删除用户
+userRouter.put('/:userId', UserController.updateUser); // 更新用户信息
+
+router.use('/user', userRouter.routes());
+router.use('/article', articleRouter.routes());
+router.use('/discuss', discussRouter.routes());
 
 module.exports = router;
 

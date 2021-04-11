@@ -32,12 +32,16 @@ const config = {
         expiresIn: '720h' // 有效期
     },
     DATABASE: {
-        database: 'sqtest',
-        user: 'sqtest',
-        password: '1',
+        database: 'myblogs_test',
+        user: 'myblogs',
+        password: 'myblogs',
+        // database: 'myblogstest',
+        // user: 'myblogstest',
+        // password: 'myblogs',
         options: {
             host: 'localhost',
             dialect: 'mysql',
+            // host: 'www.llchaoblogs.work',
             pool: {
                 max: 5,
                 min: 0,
@@ -63,7 +67,9 @@ if (!devMode) {
     console.log('env production...');
     config.DATABASE = {
         ...config.DATABASE,
-        password: 'llx1234',
+        database: 'myblogstest',
+        user: 'myblogstest',
+        password: 'myblogs',
         options: {
           host: 'www.llchaoblogs.work',
           dialect: 'mysql',

@@ -68,7 +68,7 @@ function validateEmail(rule,value,callback){
           label:'邮箱',
           widget:<Input placeholder="请输入邮箱" />,
           rules:[
-            { required: true, message: 'email is required' }
+            { required: true, message: '请输入用户名' }
           ],
           validateTrigger:'onBlur'
         },
@@ -76,7 +76,7 @@ function validateEmail(rule,value,callback){
           key: 'password',
           label: '密码',
           widget: <Input placeholder='请输入密码' type='password' />,
-          rules: [{ required: true, message: 'Password is required' }],
+          rules: [{ required: true, message: '请输入密码' }],
           validateTrigger:'onBlur'
         }
       ]
@@ -93,7 +93,7 @@ function validateEmail(rule,value,callback){
           key: 'username',
           label: '用户名',
           widget: <Input placeholder='请输入用户名' />,
-          rules: [{ required: true, message: 'Username is required' }, 
+          rules: [{ required: true, message: '请输入用户名' }, 
           // { validator: validateUsername }
         ],
           validateTrigger:'onBlur'
@@ -102,14 +102,14 @@ function validateEmail(rule,value,callback){
           key: 'password',
           label: '密码',
           widget: <Input placeholder='请输入密码' type='password' />,
-          rules: [{ required: true, message: 'Password is required' }],
+          rules: [{ required: true, message: '请输入密码' }],
           validateTrigger:'onBlur'
         },
         {
           key: 'confirm',
           label: '确认密码',
           widget: <Input placeholder='确认密码' type='password' />,
-          rules: [{ required: true, message: 'Please confirm your password!' }, { validator: compareToFirstPassword }],
+          rules: [{ required: true, message: '确认密码' }, { validator: compareToFirstPassword }],
           validateTrigger:'onBlur'
         },
         {
@@ -117,8 +117,8 @@ function validateEmail(rule,value,callback){
           label: '邮箱',
           widget: <Input placeholder='请输入您的邮箱' />,
           rules: [
-            { type: 'email', message: 'The input is not valid E-mail!' },
-            { required: true, message: 'Please input your E-mail!' },
+            { type: 'email', message: '邮箱格式不符合要求' },
+            { required: true, message: '请输入邮箱' },
             // { validator: validateEmail }
           ],
           validateTrigger:'onBlur'
@@ -202,7 +202,7 @@ function validateEmail(rule,value,callback){
   }
 
   return (
-    <Modal width={460} title={type} visible={visible}
+    <Modal width={460} title={type === 'login' ? '登录' : '注册'} visible={visible}
      footer={ null } maskClosable
     //  onCancel = {()=> props.onCancel()}
     onCancel = {e => props.dispatch({ type: 'init/switchSignModal', payload: { visible: false }})}
@@ -210,11 +210,11 @@ function validateEmail(rule,value,callback){
       <Form layout='horizontal'>
         <FormBuilder meta={getMeta(type)} form={props.form} />
         <Button type='primary' block  onClick={handleSubmit}>
-          {type}
+          {type === 'login' ? '登录' : '注册'}
         </Button>
         {GITHUB.enable && (
           <Button block htmlType='submit' icon='github' onClick={githubLogin} style={{ marginTop: 10 }}>
-            github login
+            github 登录
           </Button>
         )}
       </Form>

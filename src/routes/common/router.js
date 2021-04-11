@@ -85,6 +85,11 @@ export const RouteConfig = [
         component:()=>(import("../../views/admin/article/edit")),
         model:[import('../../models/user.js'), import('../../models/article.js'), import('../../models/tag.js')]
       },
+      {
+        path:'/admin/user',
+        component:()=>(import("../../views/admin/user/index")),
+        model:[import('../../models/user.js'), import('../../models/article.js'), import('../../models/tag.js')]
+      },
     ]
   },
 
