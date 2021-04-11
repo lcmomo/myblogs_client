@@ -179,7 +179,8 @@ const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } =
          });
 
          if (validator) {
-            const { pageNo = 1, pageSize = 10, username} = ctx.query;
+           try {
+            const { pageNo = 1, pageSize = 10, username } = ctx.query;
             const where = {
                 role: {
                     $not: 1
@@ -193,9 +194,12 @@ const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } =
              offset: (pageNo - 1) * pageSize,
              limit: parseInt(pageSize),
              row: true,
-             order: [['createAt', 'DESC']]
+             order: [['createdAt', 'DESC']]
          });
          ctx.client(200, 'success', result);
+        } catch (err) {
+          ctx.client(500, '服务端错误', null);
+        }
      }
     }
 
@@ -205,11 +209,15 @@ const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } =
              userId: Joi.number().required()
          });
          if (validator) {
+           try {
              await sequelize.query(
                  `delete comment, reply from comment left join reply on comment.id = reply.commentId where comment.userId=${ctx.params.userId}`
              )
              await UserModel.destroy({ where: { id: ctx.params.userId } });
-             ctx.client(200);
+             ctx.client(200, 'success');
+           } catch (err) {
+             ctx.client(500, '服务端错误', null)
+           }
          }
      }
 
@@ -231,7 +239,6 @@ const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } =
                 ctx.client(200);
             } catch (error) {
                 ctx.client(500, '更新失败');
-                throw error;
             }
         }
     }

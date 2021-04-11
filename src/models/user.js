@@ -1,5 +1,5 @@
-import {get, remove, save } from '../utils/storage'
-import {loginI,fetchByUserNameI, fetchUserByEmailI,createUserI, registerI }  from '../services/user'
+import { get, remove, save } from '../utils/storage'
+import { loginI,fetchByUserNameI, fetchUserByEmailI,createUserI, registerI, fetchUserListI, deleteUserI, updateUserI }  from '../services/user'
 
 const userInfo = get('userInfo')
 
@@ -76,7 +76,7 @@ export default {
     //添加用户列表
     *createUser({payload,callback},{call}){
       // console.log('resgister')
-      const response=yield call(createUserI,payload);
+      const response = yield call(createUserI,payload);
       //console.log(payload);
       if(response.message==="SUCCESS"){
         if (typeof callback === 'function') {
@@ -95,6 +95,29 @@ export default {
           callback(response);
         }
     },
+
+    // 获取用户列表
+    *fetchUserList({ payload, callback }, { call }) {
+      const result = yield call(fetchUserListI, payload);
+      console.log("use res: ca: ", result)
+      if (typeof callback === 'function') {
+        callback(result);
+      }
+    },
+    // 删除
+    *deleteUser({ payload, callback }, { call }) {
+      const result = yield call(deleteUserI, payload);
+      if (typeof callback === 'function') {
+        callback(result);
+      }
+    },
+    // 更新
+    *updateUser({ payload, callback }, { call }) {
+      const result = yield call(updateUserI, payload);
+      if (typeof callback === 'function') {
+        callback(result);
+      }
+    }
 
   },
 
@@ -120,10 +143,6 @@ export default {
       // return {...state,...action.payload}
     }
 
-   
-
-
-    
-  },
+  }
 
 };

@@ -45,7 +45,7 @@ app.use(cors(
             }
         })
     )
-    // .use(authHandler)
+    .use(authHandler)
     .use(logger());
 
 

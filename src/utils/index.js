@@ -128,7 +128,7 @@ export const calcCommentsCount = commentList => {
   let count = 0;
   if (commentList) {
   commentList.forEach(item => {
-
+    count += 1;
     if (item.replies){
       count += item.replies.length;
     }

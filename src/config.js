@@ -1,7 +1,7 @@
 import React from 'react';
 import MyInfo from './views/web/about/MyInfo.js';
 import { baseUrl } from './utils'
-export const LOGO_AVATAR=require('./assets/images/logo.png');
+export const LOGO_AVATAR = require('./assets/images/logo.png');
 export const BG_AVATAR = require('./assets/images/logo_bg.jpg'); // 后台管理
 // project config
 export const HEADER_BLOG_NAME = '夙兮执梦'; // header title 显示的名字

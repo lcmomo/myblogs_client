@@ -100,7 +100,7 @@ class Discuss extends Component {
         <div id="discuss">
           <div className="discuss-header">
             <span className="discuss-count">{ calcCommentsCount(commentList)} </span>
-            { articleId !== -1 ? '条评论' : '条留言'}
+            { articleId !== -1 ? '条评论&回复' : '条留言&回复'}
             <span className='discuss-user'>
               <Dropdown overlay={ renderDropdownMenu(username) } trigger={['click', 'hover']}>
                 <span>

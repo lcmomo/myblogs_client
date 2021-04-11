@@ -95,6 +95,7 @@ import { pathParams } from '../../../../utils'
   }
 
   function update() {
+    console.log("tags: ", tagSelectedList)
     props.dispatch({
       type: 'article/updateArticle',
       payload: {

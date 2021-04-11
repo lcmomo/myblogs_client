@@ -40,7 +40,7 @@ function ArticleManager(props) {
   }, []);
 
   function fetchList({ current = 1, pageSize = 10, ...query }) {
-    const params = { page: current, pageSize, ...query };
+    const params = { pageNo: current, pageSize, ...query };
     setLoading(true);
     props.dispatch({
       type: 'article/fetchArticleList',

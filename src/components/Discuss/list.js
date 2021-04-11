@@ -181,7 +181,7 @@ class CommentList extends Component{
     return (
       <div className='discuss-list'>
         {
-          commentList.map(comment => (
+          commentList && commentList.map(comment => (
             <CommentItem
               item={comment}
               key={comment.id}

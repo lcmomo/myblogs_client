@@ -28,7 +28,7 @@ export async function  deleteArticleByIdI(params) {
 }
 
 export async function updateArticleByIdI(params) {
-  const { editId} = params;
+  const { editId } = params;
   return request(`/article/${editId}`, {
     method: 'PUT',
     body: { ...params }

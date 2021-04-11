@@ -1,13 +1,8 @@
-import {stringify} from 'qs';
+import { stringify } from 'qs';
 import request from '../utils/request.js';
 
-import { ITEM_NAME } from '../config.js'
-import { getItemEnv }  from '../utils/index.js'
-
-//const baseUrl=getItemEnv()==='development'?"http://120.95.133.187:8080":'http://59.110.141.166:8080';
-const baseUrl=getItemEnv() === "development" ? `http://localhost:3002` : `http://www.llchaoblogs.work:8080/${ITEM_NAME}`
 export async function fetchUserListI(params){
-    return request(`/user?${stringify(params)}`).then(res=>res.data);
+    return request(`/user/list?${stringify(params)}`).then(res=> {  console.log("service res: ", res); return res.data });
 }
 export async function fetchCurrentUserI(params){
     return request(`/user/detail?${stringify(params)}`).then(res=>res.data);
@@ -21,21 +16,19 @@ export async function createUserI(params){
     }).then(res=>res.data);
 }
 
-export async function deleteUserRecordI(params){
-    return request(`/user/delete`,{
-        method:'DELETE',
-        body:params,
+export async function deleteUserI(params){
+    return request(`/user/${params}`,{
+        method:'DELETE'
     }).then(res=>res.data);
 }
 
 export async function updateUserI(params){
-
-    return request(`/user/update`,{
+  const { userId } = params;
+    return request(`/user/${userId}`,{
         method:'PUT',
-        body:params,
+        body: { ...params },
     }).then(res=>res.data);
 }
-
 
 export async function fetchByUserNameI(params){
 
