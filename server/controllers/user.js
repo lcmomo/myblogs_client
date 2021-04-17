@@ -66,8 +66,8 @@ const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } =
                 const { account, password, email } = ctx.request.body;
                 const user = await UserModel.findOne({
                     where: {
-                        // $or: { email: account, username: account },
-                        email: email,
+                        $or: { email: account, username: account },
+                        // username: account,
                     }
                 });
 

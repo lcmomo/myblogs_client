@@ -64,9 +64,9 @@ function validateEmail(rule,value,callback){
     if(type==='login'){
       elements=[
         {
-          key:'email',
-          label:'邮箱',
-          widget:<Input placeholder="请输入邮箱" />,
+          key:'account',
+          label:'用户名',
+          widget:<Input placeholder="请输入用户名或邮箱" />,
           rules:[
             { required: true, message: '请输入用户名' }
           ],
