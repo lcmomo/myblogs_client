@@ -3,8 +3,8 @@
  * @param {String} key
  */
 export const get = key => {
-  const value = localStorage.getItem(key)
-  if (!value) return null
+  const value = localStorage.getItem(key);
+  if (!value) return null;
   return value.indexOf('{') === 0 || value.indexOf('[') === 0 ? JSON.parse(value) : value
 }
 

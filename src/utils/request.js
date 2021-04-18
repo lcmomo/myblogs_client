@@ -1,5 +1,5 @@
 import fetch from 'dva/fetch';
-import { baseUrl } from './index.js';
+import { baseUrl, getToken } from './index.js';
 
 function parseJSON(response) {
   return response.json();
@@ -26,14 +26,16 @@ export default function request(url, options) {
   //console.log(options.body instanceof FormData);
  
   const newOptions = {  ...options };
-  const storgetoken=localStorage.getItem('userInfo')!==null ? JSON.parse(localStorage.getItem('userInfo')).token : null
-  if (newOptions.method === 'POST' || newOptions.method === 'PUT'||newOptions.method==='DELETE') {
+  // const storgetoken=localStorage.getItem('userInfo')!==null ? JSON.parse(localStorage.getItem('userInfo')).token : null
+  const token = getToken();
+  console.log('token: ', token)
+  if (newOptions.method === 'POST' || newOptions.method === 'PUT'|| newOptions.method==='DELETE') {
     if (!(newOptions.body instanceof FormData)) {
 
       newOptions.headers = {
         Accept: 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
-        token:storgetoken,
+        authorization: token,
         ...newOptions.headers,
       };
       newOptions.body = JSON.stringify(newOptions.body);
@@ -41,11 +43,16 @@ export default function request(url, options) {
       // newOptions.body is FormData
       newOptions.headers = {
         Accept: 'application/json',
-        token:storgetoken,
+        authorization: token,
         ...newOptions.headers,
       };
     }
   }
+  newOptions.headers = {
+    authorization: token,
+    ...newOptions.headers
+  }
+  console.log("newOPtions: ", newOptions)
 
   return fetch(`${baseUrl}${url}`, newOptions)
     .then(checkStatus)

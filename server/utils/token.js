@@ -16,7 +16,7 @@ exports.checkToken = (ctx, roleList = []) => {
         return jwt.verify(token, TOKEN.secret, function(err, decoded) {
             if (err) return false;
             else if (decoded) {
-                return !!roleList.find(item => item.role === decoded)
+                return !!roleList.find(item => item.role === decoded.role)
             }
             return false
         })

@@ -85,8 +85,8 @@ const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } =
                 }
 
             }catch (error) {
-                console.error(error);
-                throw error;
+                console.log(error);
+                ctx.client(500, '服务端错误', error);
             }
          }
      }
