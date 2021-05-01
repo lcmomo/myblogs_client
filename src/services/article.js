@@ -12,6 +12,7 @@ export async function fetchByKeywordsI(params) {
 }
 
 export async function fetchArticleDetailI(params) {
+  console.log("idL : ", params)
   return request(`/article/${params}`).then(res => res.data)
 }
 

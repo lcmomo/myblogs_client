@@ -1,5 +1,5 @@
 //密码加密公钥
-export const PUB_KEY="abcd1234abcd1234";
+export const PUB_KEY = "abcd1234abcd1234";
 
 export const OAUTH_CLIENT_ID = 'c6a96a84105bb0be1fe5'
 export const OAUTH_URL = 'https://github.com/login/oauth/authorize'
