@@ -4,7 +4,7 @@ import './article.less'
 import { translateMarkdown, calcCommentsCount, pathParams } from '../../../utils/index'
 
 // components
-import { Divider,  Icon, Spin, Drawer } from 'antd';
+import { Divider,  Icon, Spin, Drawer, message } from 'antd';
 import { connect } from 'dva';
 import ArticleTag from '../../../components/ArticleTag'
  import MyIcon from '../../../components/Icon';
@@ -51,8 +51,13 @@ class Article extends Component {
      type: 'article/fetchArticleDetail',
      payload: routeParam[1],
      callback: result => {
-       result.content = translateMarkdown(result.content);
-       this.setState((state) => ({...state, loading: false, article: result, articleId: routeParam[1] }))
+       if (result.code !==200 || !result.data) {
+         message.error('文章不存在');
+         this.setState({ loading: false })
+         return ;
+       }
+       result.data.content = translateMarkdown(result.data.content);
+       this.setState((state) => ({...state, loading: false, article: result.data, articleId: routeParam[1] }))
      }
    })
   }

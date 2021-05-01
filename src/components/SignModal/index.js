@@ -149,7 +149,7 @@ function validateEmail(rule,value,callback){
 
     e.preventDefault()
     // console.log(e)
-    props.form.validateFields((errors, values) => {
+    props.form.validateFields( async (errors, values) => {
 
       if (errors) {
        console.log('errors: ', errors);
@@ -160,7 +160,7 @@ function validateEmail(rule,value,callback){
           type:'user/login',
           payload:{
             ...values,
-            // password: encrypt(values.password)
+            password: encrypt(values.password)
           },
           callback: (res)=>{
             // console.log("res: ", res)
@@ -180,7 +180,7 @@ function validateEmail(rule,value,callback){
           type:'user/register',
           payload:{
               ...values,
-              // password:encrypt(values.password)
+              password: await encrypt(values.password)
           },
           callback:(res)=>{
             if (res.code === 200) {

@@ -10,6 +10,7 @@
     "antd": "^3.26.11",
     "axios": "^0.19.2",
     "babel-plugin-import": "^1.11.0",
+    "bcryptjs": "^2.4.3",
     "crypto-js": "^3.3.0",
     "dva": "^2.4.1",
     "highlight.js": "^9.1.0",

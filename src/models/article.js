@@ -1,4 +1,5 @@
 
+import { Message } from 'antd';
 import { fetchArticleListI, fetchArticleDetailI,
   articleCheckExistI,
   deleteArticleByIdI,
@@ -65,14 +66,13 @@ export default {
     // 获取文章详情
     *fetchArticleDetail({ payload, callback }, { call, put }) {
       const results = yield call(fetchArticleDetailI, payload);
-      const { data, code } = results;
-      if (code === 200) {
+      const { data, message, code } = results;
+
         if (typeof callback === 'function') {
-          callback(data);
+          callback(results);
         } else {
           yield put({ type: 'saveArticle', payload: results });
         }
-      }
     },
 
     // 检查文章是否存在

@@ -1,6 +1,6 @@
 const {SALT_WORK_FACTOR } = require('../config');
-const bcrypt = require('bcrypt-nodejs');
-const { func } = require('joi');
+const bcrypt = require('bcryptjs');
+
 
 /**
  * @func encrypt - 加密

@@ -18,7 +18,7 @@ function AvatarComponent({ username, github, role }) {
 }
 //
 function AppAvatar(props) {
-  const { role, username, github } = props.userInfo
+  const { role, username, github } = props.userInfo;
   if (github && props.popoverVisible) {
     return (
       <Popover
