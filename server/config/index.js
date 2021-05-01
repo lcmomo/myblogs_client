@@ -32,22 +32,34 @@ const config = {
         expiresIn: '720h' // 有效期
     },
     DATABASE: {
-        database: 'myblogs_test',
-        user: 'myblogs',
-        password: 'myblogs',
-        // database: 'myblogstest',
-        // user: 'myblogstest',
+        // database: 'myblogs_test',
+        // user: 'myblogs',
         // password: 'myblogs',
-        options: {
-            host: 'localhost',
-            dialect: 'mysql',
-            // host: 'www.llchaoblogs.work',
-            pool: {
-                max: 5,
-                min: 0,
-                acquire: 30000,
-                idle: 10000
-            },
+        // // database: 'myblogstest',
+        // // user: 'myblogstest',
+        // // password: 'myblogs',
+        // options: {
+        //     host: 'localhost',
+        //     dialect: 'mysql',
+        //     // host: 'www.llchaoblogs.work',
+        //     pool: {
+        //         max: 5,
+        //         min: 0,
+        //         acquire: 30000,
+        //         idle: 10000
+        //     },
+            database: 'myblogstest',
+            user: 'myblogstest',
+            password: 'myblogs',
+            options: {
+              host: 'www.llchaoblogs.work',
+              dialect: 'mysql',
+              pool: {
+                  max: 5,
+                  min: 0,
+                  acquire: 30000,
+                  idle: 10000
+              },
             define: {
                 timestamps: false, // 默认不加时间戳
                 freezeTableName: true // 默认表名不加s

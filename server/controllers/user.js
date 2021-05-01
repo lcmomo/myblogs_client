@@ -3,9 +3,10 @@ const axios = require('axios');
 const { GITHUB }  = require('../config');
 
 const { decodeQuery } = require('../utils');
-const { comparePassword, encrypt } = require('../utils/bcrypt');
+// const { comparePassword} = require('../utils/bcrypt');
 const { createToken } = require('../utils/token');
 const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } = require('../models');
+
 
 /**
  * 读取github用户信息
@@ -37,7 +38,7 @@ const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } =
             role,
             email,
             github: JSON.stringify(data)
-        });        
+        });
      }
 
      //更新用户信息
@@ -74,7 +75,7 @@ const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } =
                 if(!user) {
                     ctx.client(403, '用户不存在');
                 } else {
-                    const isMatch = await comparePassword(password, user.password);
+                    const isMatch = password === user.password;
                     if(!isMatch) {
                         ctx.client(403, '密码不正确');
                     } else {
@@ -162,8 +163,8 @@ const { user: UserModel, comment: CommentModel, reply: ReplyModel, sequelize } =
                  if (user && !user.github) {
                      ctx.client(403, '用户名已被占用');
                  } else {
-                    const saltPassword = await encrypt(password);
-                    await UserModel.create({ username, password: saltPassword, email });
+                    // const saltPassword = await encrypt(password);
+                    await UserModel.create({ username, password, email });
                     ctx.client(200, '注册成功');
                  }
              }
